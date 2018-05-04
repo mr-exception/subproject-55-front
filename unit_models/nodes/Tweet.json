@@ -1,0 +1,22 @@
+{
+    "text": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "_id": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "tw_id": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "created_at": {
+        "type": "Timestamps(Integer)",
+        "required": true,
+        "index": true
+    }
+}

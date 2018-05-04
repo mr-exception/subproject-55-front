@@ -1,0 +1,22 @@
+{
+    "_id": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "tw_id": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "name": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "screen_name": {
+        "type": "String",
+        "required": true,
+        "index": true
+    }
+}

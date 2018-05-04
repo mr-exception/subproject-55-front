@@ -1,0 +1,62 @@
+{
+    "_id": "dckj32f982d89j23jf4389rjd",
+    "id": 15846407,
+    "id_str": "15846407",
+    "name": "Ellen DeGeneres",
+    "screen_name": "TheEllenShow",
+    "location": "California",
+    "description": "Comedian, talk show host and ice road trucker. My tweets are real, and they\u2019re spectacular.",
+    "url": "https://t.co/t2QLdtDIfN",
+    "entities": {
+        "url": {
+            "urls": [
+                {
+                    "url": "https://t.co/t2QLdtDIfN",
+                    "expanded_url": "http://ellentube.com",
+                    "display_url": "ellentube.com",
+                    "indices": [
+                        0,
+                        23
+                    ]
+                }
+            ]
+        },
+        "description": {
+            "urls": []
+        }
+    },
+    "protected": false,
+    "followers_count": 77879410,
+    "friends_count": 35843,
+    "listed_count": 107416,
+    "created_at": "Thu Aug 14 03:50:42 +0000 2008",
+    "favourites_count": 909,
+    "utc_offset": -25200,
+    "time_zone": "Pacific Time (US & Canada)",
+    "geo_enabled": true,
+    "verified": true,
+    "statuses_count": 16630,
+    "lang": "en",
+    "contributors_enabled": false,
+    "is_translator": false,
+    "is_translation_enabled": true,
+    "profile_background_color": "3ABEE3",
+    "profile_background_image_url": "http://pbs.twimg.com/profile_background_images/446411201413541888/uY6CCUHT.png",
+    "profile_background_image_url_https": "https://pbs.twimg.com/profile_background_images/446411201413541888/uY6CCUHT.png",
+    "profile_background_tile": false,
+    "profile_image_url": "http://pbs.twimg.com/profile_images/961307061832228865/abMOp1tC_normal.jpg",
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/961307061832228865/abMOp1tC_normal.jpg",
+    "profile_banner_url": "https://pbs.twimg.com/profile_banners/15846407/1522250381",
+    "profile_link_color": "3ABEE3",
+    "profile_sidebar_border_color": "FFFFFF",
+    "profile_sidebar_fill_color": "C4C6CC",
+    "profile_text_color": "000000",
+    "profile_use_background_image": true,
+    "has_extended_profile": false,
+    "default_profile": false,
+    "default_profile_image": false,
+    "following": true,
+    "follow_request_sent": false,
+    "notifications": false,
+    "translator_type": "regular"
+}

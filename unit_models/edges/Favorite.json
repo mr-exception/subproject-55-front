@@ -1,0 +1,11 @@
+{
+    "from": "Person",
+    "to": "Tweet",
+    "properties": {
+        "created_at": {
+            "type": "Timestamps(Integer)",
+            "required": true,
+            "index": true
+        }
+    }
+}

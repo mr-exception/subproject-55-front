@@ -1,0 +1,12 @@
+{
+    "title": {
+        "type": "String",
+        "required": true,
+        "index": true
+    },
+    "utc_offset": {
+        "type": "Integer",
+        "required": true,
+        "index": true
+    }
+}
