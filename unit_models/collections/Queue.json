@@ -2,5 +2,7 @@
     "_id": "483934974343928",
     "type": "Person|Tweet",
     "tw_id": "id of entitiy in tweeter",
-    "tw_link": "link of entity in tweeter"
+    "tw_link": "link of entity in tweeter",
+    "status": "1:not_crawled,2:crawled",
+    "last_fetch": "Timestamps(Integer)"
 }
