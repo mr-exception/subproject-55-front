@@ -26,6 +26,7 @@ def get_and_save_all_followers(user_id):
     for i, user in enumerate(tweepy.Cursor(api.followers, id=user_id, count=100).pages()):
         print('Getting page {} for followers'.format(i))
         users += user
+    count = 0
     for user in users:
         user_json = user._json
         
@@ -35,6 +36,7 @@ def get_and_save_all_followers(user_id):
             person_id = db.person.update({"id": user_json["id"]}, user_json)
         
         if db.queue.count({'tw_id': user_json['id'], 'type': 'PERSON'}) == 0:
+            count += 1
             db.queue.insert({
                 'tw_id': user_json['id'],
                 'type': 'PERSON',
@@ -42,8 +44,21 @@ def get_and_save_all_followers(user_id):
                 'status': QUEUE_NOT_CRAWLED
             })
 
-    print('+{} task added'.format(len(users)))
+    print('+{} task added'.format(count))
 
+def get_and_save_all_friends(user_id):
+    ids = api.friends_ids(user_id)
+    count = 0
+    for person_id in ids:
+        count += 1
+        if db.queue.count({'tw_id': person_id, 'type': 'PERSON'}) == 0:
+            db.queue.insert({
+                'tw_id': person_id,
+                'type': 'PERSON',
+                'last_fetch': 0,
+                'status': QUEUE_NOT_CRAWLED
+            })
+    print("+{} task added".format(count))
 
 try:
     queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch': {'$lt': time() - crawl_period}}).limit(10)
@@ -61,9 +76,11 @@ try:
         else:
             person_id = db.person.update({"id": user_json["id"]}, user_json)
 
-        print('fetching all followers of {0} into queue...'.format(user_json['id']))
-        get_and_save_all_followers(user_json['id'])
+        print('fetching all F&F of {0} into queue...'.format(user_json['id']))
         
+        get_and_save_all_followers(user_json['id'])
+        get_and_save_all_friends(user_json['id'])
+
         db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch': time()}})
 
 except RateLimitError as e:
