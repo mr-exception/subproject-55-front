@@ -20,28 +20,31 @@ db = client[db_name]
 print('conncted!')
 print('---------------------------')
 
-# public_tweets = api.home_timeline()
-# for tweet_object in public_tweets:
-#     tweet = tweet_object._json
-#     id = tweet['user']['id']
-#     name = tweet['user']['url']
-#     text = tweet['text']
-#     print('{0}({1}): {2}'.format(name, id, text))
+
+def get_and_save_all_followers(user_id):
+    users = []
+    for i, user in enumerate(tweepy.Cursor(api.followers, id=user_id, count=100).pages()):
+        print('Getting page {} for followers'.format(i))
+        users += user
+    for user in users:
+        user_json = user._json
+        
+        if db.person.count({"id": user_json["id"]}) == 0:
+            person_id = db.person.insert(user_json)
+        else:
+            person_id = db.person.update({"id": user_json["id"]}, user_json)
+        
+        if db.queue.count({'tw_id': user_json['id'], 'type': 'PERSON'}) == 0:
+            db.queue.insert({
+                'tw_id': user_json['id'],
+                'type': 'PERSON',
+                'last_fetch': 0,
+                'status': QUEUE_NOT_CRAWLED
+            })
+
+    print('+{} task added'.format(len(users)))
 
 
-# print(api.friends_ids(13058682))
-
-# print(api.trends_closest(35.6215718, 51.3946415))
-
-# public_tweets = api.user_timeline(13058682)
-# public_tweets = api.home_timeline()
-# for tweet_object in public_tweets:
-#     tweet = tweet_object._json
-#     id = tweet['user']['id']
-#     name = tweet['user']['name']
-#     text = tweet['text']
-#     print('{0}({1}): {2}'.format(name, id, text))
-# print(time() - crawl_period)
 try:
     queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch': {'$lt': time() - crawl_period}}).limit(10)
     for task in queue:
@@ -59,28 +62,10 @@ try:
             person_id = db.person.update({"id": user_json["id"]}, user_json)
 
         print('fetching all followers of {0} into queue...'.format(user_json['id']))
+        get_and_save_all_followers(user_json['id'])
         
-        try:
-            followers = api.followers(user_json['id'])
-            count = 0
-            for follower in followers:
-                count += 1
-                # print('found {0}'.format(follower._json['id']))
-                if db.queue.count({'tw_id': follower._json['id'], 'type': 'PERSON'}) == 0:
-                    # print('+new task added')
-                    db.queue.insert({
-                        'tw_id': follower._json['id'],
-                        'type': 'PERSON',
-                        'last_fetch': 0,
-                        'status': QUEUE_NOT_CRAWLED
-                    })
-            print('+{0} task added'.format(count))
-            db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch': time()}})
-            print('inserted in db -> {0}'.format(person_id))
-            print('.........................')
-        except TweepError as e:
-            print(e)
-            print("skipping the bunch of users")
+        db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch': time()}})
+
 except RateLimitError as e:
     # print("Request Queue is full now!")
     print(e)
