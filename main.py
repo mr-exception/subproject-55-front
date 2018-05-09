@@ -21,9 +21,11 @@ print('conncted!')
 print('---------------------------')
 
 
+print(api.rate_limit_status())
+exit()
 def get_and_save_all_followers(user_id):
     users = []
-    for i, user in enumerate(tweepy.Cursor(api.followers, id=user_id, count=100).pages()):
+    for i, user in enumerate(tweepy.Cursor(api.followers, id=user_id, count=1000).pages()):
         print('Getting page {} for followers'.format(i))
         users += user
     count = 0
@@ -43,6 +45,11 @@ def get_and_save_all_followers(user_id):
                 'last_fetch': 0,
                 'status': QUEUE_NOT_CRAWLED
             })
+        if db.follow.count({"from_tw_id": user_json['id'], "to_tw_id": user_id}) == 0:
+            db.follow.insert({
+                "from_tw_id": user_json['id'],
+                "to_tw_id": user_id
+            })
 
     print('+{} task added'.format(count))
 
@@ -57,6 +64,11 @@ def get_and_save_all_friends(user_id):
                 'type': 'PERSON',
                 'last_fetch': 0,
                 'status': QUEUE_NOT_CRAWLED
+            })
+        if db.follow.count({"to_tw_id": user_json['id'], "from_tw_id": user_id}) == 0:
+            db.follow.insert({
+                "to_tw_id": user_json['id'],
+                "from_tw_id": user_id
             })
     print("+{} task added".format(count))
 
