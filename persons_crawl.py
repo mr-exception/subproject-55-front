@@ -38,8 +38,8 @@ try:
             person_id = db.person.update({"id": user_json["id"]}, user_json)
 
         db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch_person': time()}})
-        print("person crawled (total: {}). waiting for another request...".format(count))
         count += 1
+        print("person crawled (total: {}). waiting for another request...".format(count))
         sleep(60)
 
 except RateLimitError as e:
