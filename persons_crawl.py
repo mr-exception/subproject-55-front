@@ -22,6 +22,7 @@ print('---------------------------')
 
 try:
     queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch_person': {'$lt': time() - crawl_period}}).limit(10)
+    count = 0
     for task in queue:
         print('task {0}'.format(task['_id']))
         print('crawling person -> {0}'.format(task['tw_id']))
@@ -37,7 +38,8 @@ try:
             person_id = db.person.update({"id": user_json["id"]}, user_json)
 
         db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch_person': time()}})
-        print("person crawled. waiting for another request...")
+        print("person crawled (total: {}). waiting for another request...".format(count))
+        count += 1
         sleep(60)
 
 except RateLimitError as e:
