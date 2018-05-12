@@ -2,7 +2,7 @@ import tweepy
 import json
 from pymongo import MongoClient
 from config import *
-from time import time
+from time import time, sleep
 from tweepy.error import RateLimitError, TweepError
 
 print('conntecting to tweeter...')
@@ -20,14 +20,33 @@ db = client[db_name]
 print('conncted!')
 print('---------------------------')
 
+delays = {
+    'followers': 0,
+    'friends': 0,
+    'persons': 0
+}
 
-print(api.rate_limit_status())
-exit()
+def wait_for(op):
+    global delays
+    mydelay = delays
+    if mydelay[op] < time() - 60:
+        mydelay[op] = time()
+        # print(mydelay)
+        return
+    else:
+        print('waiting {} seconds for {}'.format((61-(time()-mydelay[op])), op))
+        sleep(61 - (time() - mydelay[op]))
+        mydelay[op] = time()
+        # print(delays)
+    delays = mydelay
+
 def get_and_save_all_followers(user_id):
     users = []
-    for i, user in enumerate(tweepy.Cursor(api.followers, id=user_id, count=1000).pages()):
-        print('Getting page {} for followers'.format(i))
+    for i, user in enumerate(tweepy.Cursor(api.followers, id=user_id, count=200).pages()):
         users += user
+        print('Getting page {} for followers, (total: {})'.format(i, len(users)))
+        wait_for('followers')
+
     count = 0
     for user in users:
         user_json = user._json
@@ -55,6 +74,7 @@ def get_and_save_all_followers(user_id):
 
 def get_and_save_all_friends(user_id):
     ids = api.friends_ids(user_id)
+    wait_for('friends')
     count = 0
     for person_id in ids:
         count += 1
@@ -78,6 +98,7 @@ try:
         print('task {0}'.format(task['_id']))
         print('crawling person -> {0}'.format(task['tw_id']))
         user = api.get_user(task['tw_id'])
+        wait_for('persons')
         user_json = user._json
         print('crawled: {0}'.format(user.name))
         print('link: {0}'.format(user._json['url']))

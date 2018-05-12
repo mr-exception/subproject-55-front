@@ -20,3 +20,7 @@ crawl_period = 0 # seconds
 # consts
 QUEUE_NOT_CRAWLED = 1
 QUEUE_CRAWLED = 2
+
+
+# neo4j
+nj_password = "reza1996"
