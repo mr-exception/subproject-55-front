@@ -21,6 +21,8 @@ print('conncted!')
 print('---------------------------')
 
 try:
+    task_count = db.queue.count({'status': QUEUE_NOT_CRAWLED, 'last_fetch_person': {'$lt': time() - crawl_period}})
+    print("total task numbers: {0}".format(task_count))
     queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch_person': {'$lt': time() - crawl_period}})
     count = 0
     for task in queue:
