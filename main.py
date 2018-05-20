@@ -62,7 +62,6 @@ def get_and_save_all_followers(user_id):
                 'tw_id': user_json['id'],
                 'type': 'PERSON',
                 'last_fetch': 0,
-                'status': QUEUE_NOT_CRAWLED
             })
         if db.follow.count({"from_tw_id": user_json['id'], "to_tw_id": user_id}) == 0:
             db.follow.insert({
@@ -83,7 +82,6 @@ def get_and_save_all_friends(user_id):
                 'tw_id': person_id,
                 'type': 'PERSON',
                 'last_fetch': 0,
-                'status': QUEUE_NOT_CRAWLED
             })
         if db.follow.count({"to_tw_id": user_json['id'], "from_tw_id": user_id}) == 0:
             db.follow.insert({
@@ -93,7 +91,7 @@ def get_and_save_all_friends(user_id):
     print("+{} task added".format(count))
 
 try:
-    queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch': {'$lt': time() - crawl_period}}).limit(10)
+    queue = db.queue.find({'last_fetch': {'$lt': time() - crawl_period}}).limit(10)
     for task in queue:
         print('task {0}'.format(task['_id']))
         print('crawling person -> {0}'.format(task['tw_id']))
@@ -114,7 +112,7 @@ try:
         get_and_save_all_followers(user_json['id'])
         get_and_save_all_friends(user_json['id'])
 
-        db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch': time()}})
+        db.queue.update({'_id': task['_id']}, {'$set': {'last_fetch': time()}})
 
 except RateLimitError as e:
     # print("Request Queue is full now!")

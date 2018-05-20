@@ -14,7 +14,7 @@ db_port = '27017'
 db_auth = False
 
 # timing
-crawl_period = 0 # seconds
+crawl_period = 60 * 60 * 24 # seconds
 
 
 # consts

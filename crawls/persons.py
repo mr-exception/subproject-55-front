@@ -21,9 +21,9 @@ print('conncted!')
 print('---------------------------')
 
 try:
-    task_count = db.queue.count({'status': QUEUE_NOT_CRAWLED, 'last_fetch_person': {'$lt': time() - crawl_period}})
+    task_count = db.queue.count({'last_fetch_person': {'$lt': time() - crawl_period}})
     print("total task numbers: {0}".format(task_count))
-    queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch_person': {'$lt': time() - crawl_period}})
+    queue = db.queue.find({'last_fetch_person': {'$lt': time() - crawl_period}})
     count = 0
     for task in queue:
         print('task {0}'.format(task['_id']))
@@ -39,7 +39,7 @@ try:
         else:
             person_id = db.person.update({"id": user_json["id"]}, user_json)
 
-        db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch_person': time()}})
+        db.queue.update({'_id': task['_id']}, {'$set': {'last_fetch_person': time()}})
         count += 1
         print("person crawled (total: {}). waiting for another request...".format(count))
         sleep(60)

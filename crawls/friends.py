@@ -21,9 +21,9 @@ print('conncted!')
 print('---------------------------')
 
 try:
-    task_count = db.queue.count({'status': QUEUE_NOT_CRAWLED, 'last_fetch_friend': {'$lt': time() - crawl_period}})
+    task_count = db.queue.count({, 'last_fetch_friend': {'$lt': time() - crawl_period}})
     print("total task numbers: {0}".format(task_count))
-    queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch_friend': {'$lt': time() - crawl_period}})
+    queue = db.queue.find({, 'last_fetch_friend': {'$lt': time() - crawl_period}})
     for task in queue:
         print('task {0}'.format(task['_id']))
         print('crawling person -> {0}'.format(task['tw_id']))
@@ -36,8 +36,10 @@ try:
                 db.queue.insert({
                     'tw_id': person_id,
                     'type': 'PERSON',
-                    'last_fetch': 0,
-                    'status': QUEUE_NOT_CRAWLED
+                    'last_fetch_person': time(),
+                    'last_fetch_follow': 0,
+                    'last_fetch_friend': 0,
+                    
                 })
             if db.follow.count({"to_tw_id": person_id, "from_tw_id": task['tw_id']}) == 0:
                 db.follow.insert({
@@ -46,7 +48,7 @@ try:
                 })
         print("+{} task added".format(count))
         sleep(60)
-        db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch_friend': time()}})
+        db.queue.update({'_id': task['_id']}, {'$set': {'last_fetch_friend': time()}})
 
 except RateLimitError as e:
     # print("Request Queue is full now!")

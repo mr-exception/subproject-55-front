@@ -21,9 +21,9 @@ print('conncted!')
 print('---------------------------')
 
 try:
-    task_count = db.queue.count({'status': QUEUE_NOT_CRAWLED, 'last_fetch_follow': {'$lt': time() - crawl_period}})
+    task_count = db.queue.count({'last_fetch_follow': {'$lt': time() - crawl_period}})
     print("total task numbers: {0}".format(task_count))
-    queue = db.queue.find({'status': QUEUE_NOT_CRAWLED, 'last_fetch_follow': {'$lt': time() - crawl_period}})
+    queue = db.queue.find({'last_fetch_follow': {'$lt': time() - crawl_period}})
     count = 0
     for task in queue:
         print('task {0}'.format(task['_id']))
@@ -51,8 +51,7 @@ try:
                     'type': 'PERSON',
                     'last_fetch_person': time(),
                     'last_fetch_follow': 0,
-                    'last_fetch_friend': 0,
-                    'status': QUEUE_NOT_CRAWLED
+                    'last_fetch_friend': 0
                 })
             if db.follow.count({"from_tw_id": user_json['id'], "to_tw_id": task['tw_id']}) == 0:
                 db.follow.insert({
@@ -64,7 +63,7 @@ try:
 
         count += 1
         print("followers crawled (total: {}). waiting for another request...".format(count))
-        db.queue.update({'_id': task['_id']}, {'$set': {'status': QUEUE_CRAWLED, 'last_fetch_follow': time()}})
+        db.queue.update({'_id': task['_id']}, {'$set': {'last_fetch_follow': time()}})
         
 
 except RateLimitError as e:
