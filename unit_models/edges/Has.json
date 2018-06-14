@@ -1,4 +1,0 @@
-{
-    "from": "Tweet|Person",
-    "to": "Lang|TimeZone|HashTag|Location"
-}

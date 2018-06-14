@@ -1,7 +1,0 @@
-{
-    "from": "Person",
-    "to": "Tweet",
-    "properties": {
-
-    }
-}

@@ -1,6 +1,0 @@
-{
-    "from": "person_id in mongo",
-    "to": "person_id in mongo",
-    "from_tw_id": "tweeter id",
-    "to_tw_id": "tweeter id"
-}
