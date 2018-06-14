@@ -1,21 +1,14 @@
 import numpy as np
+import math
 from random import random as rnd
-
-input_size = 16
-output_size = 5
-samples_count = 400
+import real
+samples_count = 100
 
 
 def generate_sample_string():
-    global inputs,input_size,outputs,output_size
-    output = ''
-    for i in range(0, input_size):
-        output += str(int(rnd()*2)%2)
-    param = int(output, 2)
-    output += ':'
-    # print(int((np.sin(param)+1)*10))
-    output += str(np.binary_repr(int(np.log(param)*5), output_size))
-    return output
+    input_var = int(rnd()* 2**real.input_size)
+    output_var = real.calc(input_var)
+    return '{}:{}'.format(input_var, output_var)
 
 output = open('data.txt', 'w+')
 
