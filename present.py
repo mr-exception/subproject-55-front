@@ -17,7 +17,7 @@ def test(test_cases):
     plt.title("Matplotlib demo") 
     plt.xlabel("x axis caption") 
     plt.ylabel("y axis caption") 
-    plt.plot(inputs,outputs)
+    plt.plot(inputs,outputs, '.')
 
     test_inputs = []
     test_outputs = []
@@ -26,5 +26,5 @@ def test(test_cases):
         test_inputs.append(test_cases[i][0])
         test_outputs.append(test_cases[i][1])
     
-    plt.plot(test_inputs, test_outputs)
+    plt.plot(test_inputs, test_outputs, 'ro')
     plt.show()

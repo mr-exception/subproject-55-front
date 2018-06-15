@@ -13,7 +13,7 @@ for i in range(0, len(data)):
 data.sort()
 # sample input to test
 sum_of_distances = 0
-tests_count = 2000
+tests_count = 20
 
 test_cases = []
 
