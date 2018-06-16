@@ -12,32 +12,36 @@ avg_scoring_dplen = 2
 positive_data, negative_data = present.load_cases()
 
 
-def get_index(param):
-    global positive_data
-    
+def get_index(param, data):
     index = -1
-    for i in range(0, len(positive_data)):
-        # print('{} ? {}'.format(positive_data[i][0], param))
-        if positive_data[i][0] > param:
+    for i in range(0, len(data)):
+        # print('{} ? {}'.format(data[i][0], param))
+        if data[i][0] > param:
             index = i
             break
     return index
+
+
 def avg_scoring(param):
-    global avg_scoring_wight, avg_scoring_dplen, positive_data
+    global avg_scoring_wight, avg_scoring_dplen, positive_data, negative_data
     
-    index = get_index(param)
-    neighbours = np.asarray(positive_data[max(index-neighbour_max_dst-1, 0):min(index+neighbour_max_dst, len(positive_data)-1)])
-    avg = np.average(neighbours[:,1])
-    # print(neighbours)
+    positive_index = get_index(param,positive_data)
+    positive_neighbours = np.asarray(positive_data[max(positive_index-neighbour_max_dst-1, 0):min(positive_index+neighbour_max_dst, len(positive_data)-1)])
+
+    avg = np.average(positive_neighbours[:,1])
     result = np.zeros(2**real.output_size, int)
     for i in range(0, (2**real.output_size)):
         if i >= avg-avg_scoring_dplen and i <= avg+avg_scoring_dplen:
             result[i] = avg_scoring_wight
-        else:
-            result[i] = 0
+    
+    negative_index = get_index(param,negative_data)
+    negative_neighbours = np.asarray(negative_data[max(negative_index-neighbour_max_dst-1, 0):min(negative_index+neighbour_max_dst, len(negative_data)-1)])
+    for nn in negative_neighbours:
+        result[nn[1]] -= avg_scoring_wight
+
     return result
 
-def gray_scoring(param, dpt=1):
+def get_gray_codes(param, dpt=1):
     binary_param = np.binary_repr(param, real.input_size)
     grays = []
     for i in range(0, real.input_size):
@@ -46,13 +50,10 @@ def gray_scoring(param, dpt=1):
             gray_code[i] = '0'
         else:
             gray_code[i] = '1'
-        # print("".join(gray_code))
         gray_code = int("".join(gray_code), 2)
         grays.append(gray_code)
         if dpt > 1:
             grays += gray_scoring(gray_code, dpt-1)
-    # for g in grays:
-    #     print(g)
     return grays
 
 def get_sample(weights):
@@ -73,4 +74,4 @@ def calc(param):
     
     return get_sample(weights)
 
-gray_scoring(5, 2)
+# gray_scoring(5, 2)
