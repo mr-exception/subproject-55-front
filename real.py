@@ -1,6 +1,6 @@
 import numpy as np
 # input size of core in bits
-input_size = 16
+input_size = 4
 # output size of core in bits
 output_size = 8
 def calc(input):
