@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import real
 
 def load():
     t_inputs = []
@@ -57,4 +58,16 @@ def test(test_cases):
     plt.plot(test_inputs, test_outputs, '.')
     plt.show()
 
-load_cases()
+def show(param, target):
+    t_inputs, t_outputs, f_inputs, f_outputs = load()
+    plt.figure()
+    plt.scatter(t_inputs, t_outputs, color='green', label='inner', alpha=0.5)
+    plt.scatter(f_inputs, f_outputs, color='red', label='outer', alpha=0.5)
+    plt.scatter([param], [target], color='yellow', label='outer', alpha=0.5)
+    plt.title('Alcohol and Malic Acid content of the wine dataset')
+    plt.xlabel('Alcohol')
+    plt.ylabel('Malic Acid')
+    plt.legend(loc='upper left')
+    plt.grid()
+    plt.tight_layout()
+    plt.show()

@@ -56,6 +56,8 @@ def get_gray_codes(param, dpt=1):
             grays += gray_scoring(gray_code, dpt-1)
     return grays
 
+
+
 def get_sample(weights):
     max_weight = 0
     for i in range(0, len(weights)):
@@ -74,4 +76,6 @@ def calc(param):
     
     return get_sample(weights)
 
-# gray_scoring(5, 2)
+param = 48372
+target = calc(param)
+present.show(param, target)
