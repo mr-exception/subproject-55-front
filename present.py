@@ -28,10 +28,15 @@ def load_cases():
 
     sample_content = open('data.txt', 'r').read().split('\n')
     for i in range(0, len(sample_content)):
+        if sample_content[i] == '':
+            del sample_content[i]
+            i -= 1
+            continue
+        
         parts = sample_content[i].split(':')
         sample_content[i] = (int(parts[0]), int(parts[1]), int(parts[2]))
+
     sample_content.sort()
-    # print(sample_content)
     for line in sample_content:
         if line[2] == 1:
             positive_data.append((line[0], line[1]))

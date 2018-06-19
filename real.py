@@ -1,8 +1,8 @@
 import numpy as np
 # input size of core in bits
-input_size = 16
+input_size = 6
 # output size of core in bits
-output_size = 8
+output_size = 4
 def calc(input):
     # if input < 2**15:
     #     return 0
