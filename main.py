@@ -4,10 +4,10 @@ from random import random as rnd
 import real
 import present
 
-neighbour_max_dst = 2
+neighbour_max_dst = 5
 
 avg_scoring_wight = 1
-avg_scoring_dplen = 2
+avg_scoring_dplen = 1
 
 positive_data, negative_data = present.load_cases()
 def fresh_cases():
@@ -28,52 +28,32 @@ def get_index(param, data):
 
 def avg_scoring(param):
     global avg_scoring_wight, avg_scoring_dplen, positive_data, negative_data
-    
-    positive_index = get_index(param,positive_data)
-    min_positive_index = max(positive_index-neighbour_max_dst-1, 0)
-    max_positive_index = min(positive_index+neighbour_max_dst, len(negative_data))
-
-    positive_neighbours = np.asarray(positive_data[min_positive_index:max_positive_index])
-    print(positive_data)
-    print(positive_index)
-    print(positive_neighbours)
-    negative_index = get_index(param,negative_data)
-    min_negative_index = max(negative_index-neighbour_max_dst-1, 0)
-    for i in range(0, min_negative_index):
-        if negative_data[i][0] == param:
-            min_negative_index = i
-            break
-
-    max_negative_index = min(negative_index+neighbour_max_dst, len(negative_data))
-    for i in range(max_negative_index+1, len(negative_data)):
-        if negative_data[i][0] > param:
-            max_negative_index = i
-            break
-    
-    # print(min_negative_index, max_negative_index)
-    negative_neighbours = np.asarray(negative_data[min_negative_index:max_negative_index])
-    
-    # print(negative_neighbours)
-
-
     result = np.zeros(2**real.output_size, int)
-    if len(positive_neighbours) == 0:
+
+    positive_avg = 0
+    positive_avg_count = 0
+    for pd in positive_data:
+        if abs(pd[0] - param) < neighbour_max_dst:
+            positive_avg += pd[1]
+            positive_avg_count += 1
+    if positive_avg_count == 0:
+        positive_avg = int(rnd() * real.output_size)
+    else:
+        positive_avg = int(positive_avg/positive_avg_count)
+    if positive_avg_count == 0:
         print('null positive sign')
         random_index = int(rnd() * 2**real.output_size)
         for i in range(max(random_index-avg_scoring_dplen,0), min(random_index-avg_scoring_dplen,2**real.output_size)):
             result[i] += avg_scoring_wight
     else:
         print('found positive sign')
-        avg = np.average(positive_neighbours[:,1])
-        result = np.zeros(2**real.output_size, int)
-        for i in range(0, (2**real.output_size)):
-            if i >= avg-avg_scoring_dplen and i <= avg+avg_scoring_dplen:
-                result[i] = avg_scoring_wight
+        print(range(max(positive_avg - avg_scoring_dplen+1, 0), min(positive_avg + avg_scoring_dplen-1, 2**real.input_size)))
+        for i in range(max(positive_avg - avg_scoring_dplen, 0), min(positive_avg + avg_scoring_dplen, 2**real.input_size)):
+            result[i] = avg_scoring_wight
 
-    if len(negative_neighbours) != 0:
-        print('found negative sign')
-        for nn in negative_neighbours:
-            result[nn[1]] -= avg_scoring_wight
+    for nd in negative_data:
+        if abs(nd[0] - param) < neighbour_max_dst:
+            result[nd[1]] -= avg_scoring_wight
 
     return result
 
