@@ -1,0 +1,2 @@
+db.materials.deleteMany({})
+db.units.deleteMany({})
