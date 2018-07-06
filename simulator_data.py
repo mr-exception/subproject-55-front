@@ -37,18 +37,10 @@ material_users = {
 
 def insert_event_in_db(date):
     global units, users, material_importers, material_users, db
-    for m in materials:
-        db['materials'].insert({
-            'title': m,
-            'value': materials[m],
-            'date': date
-        })
-    for u in units:
-        db['units'].insert({
-            'title': u,
-            'value': units[u],
-            'date': date
-        })
+    db['events'].insert({
+        'units': units,
+        'materials': materials
+    })
 
 def single_change_in_material():
     global materials, importers, users, material_importers, material_users
@@ -60,7 +52,7 @@ def single_change_in_material():
     # print('cost change {}'.format(change))
     material_final_cost = material_current_cost + change
     # print('material final cost: {}'.format(material_final_cost))
-    change_rate = float(change/material_current_cost)
+    change_rate = float(material_final_cost/material_current_cost)
     # print('change rate: {}'.format(change_rate))
 
     # effects on units and users
@@ -69,7 +61,7 @@ def single_change_in_material():
     effected_units = material_importers[material_index]
     for unit in effected_units:
         current = units[unit]
-        final = current * change_rate
+        final = int(current * change_rate)
         units[unit] = final
         # print('unit {} cost changed from {} to {}'.format(unit, current, final))
 
