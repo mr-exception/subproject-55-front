@@ -1,25 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, Row, Col, InputGroup, FormControl, Button } from 'react-bootstrap';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Row className="justify-content-md-center">
+        <Col md={2} style={{marginTop: 100}}>
+          <img src="logo.svg" />
+        </Col>
+      </Row>
+      <Row className="justify-content-md-center">
+        <Col md={6}>
+          <InputGroup className="mb-3">
+            <FormControl
+              placeholder="Enter username ..."
+              aria-label="Enter username ..."
+              aria-describedby="ats"
+            />
+            <InputGroup.Append>
+              <Button variant="outline-primary">Search</Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
