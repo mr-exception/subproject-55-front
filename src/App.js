@@ -14,12 +14,17 @@ class App extends React.Component {
 
     });
   }
+  search_failed = () => {
+    this.setState({
+      step: 'home',
+    });
+  }
   render() {
     switch (this.state.step) {
       case 'home':
         return <Search search={this.search} />;
       case 'searching':
-        return <Loading query={this.state.query}/>;
+        return <Loading query={this.state.query} failed={this.search_failed} />;
     }
   }
 }

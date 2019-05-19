@@ -10,17 +10,89 @@ const request = require("request");
 const get_profile = (screen_name, resolve, on_user_not_found, on_network_error) => {
   var options = {
     method: 'GET',
-    url: `http://localhost:8000/api/twitter/search-user/${screen_name}`
+    url: `http://core.missyoudaddy.ir/api/twitter/search-user/${screen_name}`
   };
   request(options, function (error, response, body) {
-    // if (error) throw new Error(error);
+    if (error) {
+      on_network_error();
+      return;
+    }
     const result = JSON.parse(body);
-    if(body.ok){
-      resolve(body.user);
-    }else{
-      if(body.code == 50){
+    if (result.ok) {
+      resolve(result.user);
+    } else {
+      if (result.code == 50) {
         on_user_not_found();
-      }else{
+      } else {
+        on_network_error();
+      }
+    }
+  });
+}
+const get_tweets = (screen_name, resolve, on_user_not_found, on_network_error) => {
+  var options = {
+    method: 'GET',
+    url: `http://core.missyoudaddy.ir/api/twitter/tweets/${screen_name}`
+  };
+  request(options, function (error, response, body) {
+    if (error) {
+      on_network_error();
+      return;
+    }
+    const result = JSON.parse(body);
+    console.log(result)
+    if (result.ok) {
+      resolve(result.user);
+    } else {
+      if (result.code == 50) {
+        on_user_not_found();
+      } else {
+        on_network_error();
+      }
+    }
+  });
+}
+const get_followers = (screen_name, resolve, on_user_not_found, on_network_error) => {
+  var options = {
+    method: 'GET',
+    url: `http://core.missyoudaddy.ir/api/twitter/followers/${screen_name}`
+  };
+  request(options, function (error, response, body) {
+    if (error) {
+      on_network_error();
+      return;
+    }
+    const result = JSON.parse(body);
+    console.log(result)
+    if (result.ok) {
+      resolve(result.user);
+    } else {
+      if (result.code == 50) {
+        on_user_not_found();
+      } else {
+        on_network_error();
+      }
+    }
+  });
+}
+const get_friends = (screen_name, resolve, on_user_not_found, on_network_error) => {
+  var options = {
+    method: 'GET',
+    url: `http://core.missyoudaddy.ir/api/twitter/friends/${screen_name}`
+  };
+  request(options, function (error, response, body) {
+    if (error) {
+      on_network_error();
+      return;
+    }
+    const result = JSON.parse(body);
+    console.log(result)
+    if (result.ok) {
+      resolve(result.user);
+    } else {
+      if (result.code == 50) {
+        on_user_not_found();
+      } else {
         on_network_error();
       }
     }
@@ -29,5 +101,8 @@ const get_profile = (screen_name, resolve, on_user_not_found, on_network_error) 
 
 
 module.exports = {
-  get_profile
+  get_profile,
+  get_tweets,
+  get_friends,
+  get_followers,
 }
