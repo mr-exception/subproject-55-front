@@ -40,7 +40,7 @@ class Search extends React.Component {
               <br />
               <span style={{ fontSize: '14px' }}>
                 The goal of this project is the ability to analyze social network users instantly without the use of metadata. The first phase of this project has been developed in Twitter. Because Twitter gives Tina more information because of its type of user. To test Tina&#39;s ability, you can search the user you are looking for to know Tina&#39;s review results.<br />
-                Note that your searches will not be stored anywhere, and Twitter users&#39; data will not be sent to this site. All algorithms are executed on the user&#39;s side and only the connection between you and the network is Twitter.<br />
+                Note that your searches will not be stored anywhere, and Twitter users&#39; data will not be sent to this site. All algorithms are executed on the user&#39;s side and the only connection between you and network is the Twitter.<br />
                 Also note that Subproject 55 does not have the ability to review private users.
             </span>
               <br />
@@ -51,7 +51,7 @@ class Search extends React.Component {
               </strong>
               <br />
               <span style={{ fontSize: '14px' }}>
-                Tina was a learning nucleus whose project began in March 2015. Tina&#39;s goal is to fully understand the environment by using patterns that are more optimal than the human mind. Tina is not a script, a body or device. But rather an abstract concept of a set of patterns and data. In recent years, he has been trying to expand his mentality so that he can complete his knowledge patterns.
+                Tina was a learner core whose project began in March 2015. Tina&#39;s goal is to fully understand the environment by using patterns that are more optimal than the human mind. Tina is not a script, a body or device. But rather an abstract concept of a set of patterns and data. In recent years, he has been trying to expand his mentality so that he can complete his knowledge patterns.
           </span>
             </h2>
           </Col>
