@@ -15,7 +15,7 @@ class Search extends React.Component {
           </Col>
         </Row>
         <Row style={{ marginTop: 50 }} className="justify-content-center">
-          <Col md={6}>
+          <Col md={8} xs={8}>
             <InputGroup size="lg" className="mb-3">
               <FormControl
                 id="query"
@@ -30,7 +30,7 @@ class Search extends React.Component {
           </Col>
         </Row>
         <Row className="justify-content-center" style={{ textAlign: 'justify', marginBottom: 50 }}>
-          <Col md={6} sm={12}>
+          <Col md={8} sm={8}>
             <h2>
               <strong>
                 <span style={{ fontSize: '18px' }}>

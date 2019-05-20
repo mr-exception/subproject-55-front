@@ -40,25 +40,29 @@ class Loading extends React.Component {
     });
   }
   start = () => {
-    get_profile(this.props.query, (info) => {
+    get_profile(this.props.query, (profile) => {
       this.setState({
         caption: 'profile found, retriving tweets',
         progress: 25,
       }, () => {
-        get_tweets(this.props.query, (info) => {
+        get_tweets(this.props.query, (tweets) => {
           this.setState({
             caption: 'tweets retrived, retriving followers',
             progress: 55,
           }, () => {
-            get_followers(this.props.query, (info) => {
+            get_followers(this.props.query, (followers) => {
               this.setState({
                 caption: 'followers retrived, retriving friends',
                 progress: 80,
               }, () => {
-                get_friends(this.props.query, (info) => {
+                get_friends(this.props.query, (friends) => {
                   this.setState({
                     caption: 'friends retrived, done!',
                     progress: 100,
+                  }, () => {
+                    this.props.finished({
+                      profile, tweets, followers, friends
+                    });
                   });
                 }, this.user_not_found, this.network_error);
               });
