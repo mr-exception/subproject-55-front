@@ -42,10 +42,33 @@ const get_tweets = (screen_name, resolve, on_user_not_found, on_network_error) =
     const result = JSON.parse(body);
     console.log(result)
     if (result.ok) {
-      resolve(result.user);
+      resolve(result.tweets);
     } else {
       if (result.code == 50) {
         on_user_not_found();
+      } else {
+        on_network_error();
+      }
+    }
+  });
+}
+const get_tweet = (tweet_id, resolve, on_tweet_not_found, on_network_error) => {
+  var options = {
+    method: 'GET',
+    url: `http://core.missyoudaddy.ir/api/twitter/tweet/${tweet_id}`
+  };
+  request(options, function (error, response, body) {
+    if (error) {
+      on_network_error();
+      return;
+    }
+    const result = JSON.parse(body);
+    console.log(result)
+    if (result.ok) {
+      resolve(result.tweet);
+    } else {
+      if (result.code == 50) {
+        on_tweet_not_found();
       } else {
         on_network_error();
       }
@@ -65,7 +88,7 @@ const get_followers = (screen_name, resolve, on_user_not_found, on_network_error
     const result = JSON.parse(body);
     console.log(result)
     if (result.ok) {
-      resolve(result.user);
+      resolve(result.users);
     } else {
       if (result.code == 50) {
         on_user_not_found();
@@ -88,7 +111,7 @@ const get_friends = (screen_name, resolve, on_user_not_found, on_network_error) 
     const result = JSON.parse(body);
     console.log(result)
     if (result.ok) {
-      resolve(result.user);
+      resolve(result.users);
     } else {
       if (result.code == 50) {
         on_user_not_found();
@@ -105,4 +128,5 @@ module.exports = {
   get_tweets,
   get_friends,
   get_followers,
+  get_tweet,
 }

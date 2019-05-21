@@ -4,7 +4,7 @@ import Loading from './Containers/Loading';
 import Visual from './Containers/Visual';
 class App extends React.Component {
   state = {
-    step: 'visual',
+    step: 'home',
     query: '',
   };
   search = (query) => {
