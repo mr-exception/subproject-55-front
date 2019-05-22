@@ -80,7 +80,7 @@ class Loading extends React.Component {
         </Row>
         <Row style={{ marginTop: 25 }} className="justify-content-center">
           <Col md={6}>
-            <ProgressBar style={{ fontSize: 15, height: 40 }} now={this.state.progress} label={`${this.state.progress}%`} />
+            <ProgressBar animated style={{ fontSize: 15, height: 40 }} now={this.state.progress} label={`${this.state.progress}%`} />
           </Col>
         </Row>
         <Modal show={this.state.user_not_found}>
