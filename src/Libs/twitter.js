@@ -10,7 +10,7 @@ const request = require("request");
 const get_profile = (screen_name, resolve, on_user_not_found, on_network_error) => {
   var options = {
     method: 'GET',
-    url: `http://core.missyoudaddy.ir/api/twitter/search-user/${screen_name}`
+    url: `https://core.missyoudaddy.ir/api/twitter/search-user/${screen_name}`
   };
   request(options, function (error, response, body) {
     if (error) {
@@ -32,7 +32,7 @@ const get_profile = (screen_name, resolve, on_user_not_found, on_network_error) 
 const get_tweets = (screen_name, page=1, resolve, on_user_not_found, on_network_error) => {
   var options = {
     method: 'GET',
-    url: `http://core.missyoudaddy.ir/api/twitter/tweets/${screen_name}?p=${page}`
+    url: `https://core.missyoudaddy.ir/api/twitter/tweets/${screen_name}?p=${page}`
   };
   request(options, function (error, response, body) {
     if (error) {
@@ -54,7 +54,7 @@ const get_tweets = (screen_name, page=1, resolve, on_user_not_found, on_network_
 const get_tweet = (tweet_id, resolve, on_tweet_not_found, on_network_error) => {
   var options = {
     method: 'GET',
-    url: `http://core.missyoudaddy.ir/api/twitter/tweet/${tweet_id}`
+    url: `https://core.missyoudaddy.ir/api/twitter/tweet/${tweet_id}`
   };
   request(options, function (error, response, body) {
     if (error) {
@@ -76,7 +76,7 @@ const get_tweet = (tweet_id, resolve, on_tweet_not_found, on_network_error) => {
 const get_followers = (screen_name, page=1, resolve, on_user_not_found, on_network_error) => {
   var options = {
     method: 'GET',
-    url: `http://core.missyoudaddy.ir/api/twitter/followers/${screen_name}?p=${page}`
+    url: `https://core.missyoudaddy.ir/api/twitter/followers/${screen_name}?p=${page}`
   };
   request(options, function (error, response, body) {
     if (error) {
@@ -98,7 +98,7 @@ const get_followers = (screen_name, page=1, resolve, on_user_not_found, on_netwo
 const get_friends = (screen_name, page=1, resolve, on_user_not_found, on_network_error) => {
   var options = {
     method: 'GET',
-    url: `http://core.missyoudaddy.ir/api/twitter/friends/${screen_name}?p=${page}`
+    url: `https://core.missyoudaddy.ir/api/twitter/friends/${screen_name}?p=${page}`
   };
   request(options, function (error, response, body) {
     if (error) {
