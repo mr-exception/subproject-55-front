@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, ProgressBar, Modal, Button } from 'react-bootstrap';
-import { get_profile, get_tweets, get_followers, get_friends} from '../Libs/twitter';
+import { get_profile, get_tweets, get_followers, get_friends } from '../Libs/twitter';
 
 class Loading extends React.Component {
   state = {
@@ -45,17 +45,17 @@ class Loading extends React.Component {
         caption: 'profile found, retriving tweets',
         progress: 25,
       }, () => {
-        get_tweets(this.props.query, (tweets) => {
+        get_tweets(this.props.query, 1, (tweets) => {
           this.setState({
             caption: 'tweets retrived, retriving followers',
             progress: 55,
           }, () => {
-            get_followers(this.props.query, (followers) => {
+            get_followers(this.props.query, 1, (followers) => {
               this.setState({
                 caption: 'followers retrived, retriving friends',
                 progress: 80,
               }, () => {
-                get_friends(this.props.query, (friends) => {
+                get_friends(this.props.query, 1, (friends) => {
                   this.setState({
                     caption: 'friends retrived, done!',
                     progress: 100,
