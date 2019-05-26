@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Table, Card, Tab, Tabs, Image, Button } from 'react-bootstrap';
 import { get_tweets, get_followers, get_friends } from '../Libs/twitter';
+import LT from './Components/Charts/LT';
 import Tweet from './Components/Tweet';
 import Person from './Components/Person';
 
@@ -124,7 +125,14 @@ class Visual extends React.Component {
           <Col md={8} sm={12} xs={12}>
             <Card>
               <Card.Body>
-                <Tabs defaultActiveKey="timeline" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey="reports" id="uncontrolled-tab-example">
+                  <Tab eventKey="reports" title="Reports">
+                    <Row style={{marginTop: 25}}>
+                      <Col md={12}>
+                        <LT />
+                      </Col>
+                    </Row>
+                  </Tab>
                   <Tab eventKey="timeline" title="Timeline">
                     <Row style={{ marginTop: 25 }}>
                       {this.state.tweets.slice(this.state.pagination.tweets * 10, (this.state.pagination.tweets + 1) * 10).map(item => <Tweet data={item} key={item.id_str} />)}
