@@ -5,7 +5,6 @@ class Person extends React.Component {
     data: this.props.data,
   }
   render() {
-    const ca = new Date((this.state.data || {}).created_at) // created at
     return (
       <Col md={12} style={{ marginTop: 5 }}>
         <Card>
@@ -38,7 +37,7 @@ class Person extends React.Component {
                           <td>{this.state.data.statuses_count}</td>
                         </tr>
                         <tr>
-                          <td>likes</td>
+                          <td>favorites</td>
                           <td>{this.state.data.favourites_count}</td>
                         </tr>
                       </tbody>

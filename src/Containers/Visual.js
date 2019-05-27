@@ -112,7 +112,7 @@ class Visual extends React.Component {
                           <td>{this.state.profile.statuses_count}</td>
                         </tr>
                         <tr>
-                          <td>likes</td>
+                          <td>favorites</td>
                           <td>{this.state.profile.favourites_count}</td>
                         </tr>
                       </tbody>

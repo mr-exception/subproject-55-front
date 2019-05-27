@@ -7,7 +7,7 @@ class Search extends React.Component {
     this.props.search(query)
   }
   handleKeyDown = (e) => {
-    if(e.keyCode == 13)
+    if(e.keyCode === 13)
       this.execute();
   }
   render() {
