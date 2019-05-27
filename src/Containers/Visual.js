@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Table, Card, Tab, Tabs, Image, Button } from 'react-bootstrap';
 import { get_tweets, get_followers, get_friends } from '../Libs/twitter';
 import LT from './Components/Charts/LT';
+import RT from './Components/Charts/RT';
 import Tweet from './Components/Tweet';
 import Person from './Components/Person';
 
@@ -130,6 +131,7 @@ class Visual extends React.Component {
                     <Row style={{ marginTop: 25 }}>
                       <Col md={12}>
                         <LT tweets={this.state.tweets} />
+                        <RT tweets={this.state.tweets} />
                       </Col>
                     </Row>
                   </Tab>

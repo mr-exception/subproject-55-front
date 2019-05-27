@@ -2,30 +2,30 @@ import React from 'react';
 import Chart from 'react-google-charts';
 import { Row, Col, Table } from 'react-bootstrap';
 /**
- * like and tweets charts in co-operative
+ * retweets and tweets charts in co-operative
  */
-class LT extends React.Component {
+class RT extends React.Component {
   add_to_result = (result, tweet) => {
     let created_at = new Date(tweet.created_at);
     created_at = `${created_at.getFullYear()}/${created_at.getMonth()}/${created_at.getDate()}`;
     for (let i = 0; i < result.chart.length; i++) {
       if (result.chart[i][0] === created_at) {
         result.chart[i][1]++;
-        result.chart[i][2] += tweet.favorite_count;
-        result.likes += tweet.favorite_count;
+        result.chart[i][2] += tweet.retweet_count;
+        result.retweets += tweet.retweet_count;
         result.tweets += 1;
         return result;
       }
     }
-    result.chart.push([created_at, 1, tweet.favorite_count]);
+    result.chart.push([created_at, 1, tweet.retweet_count]);
     return result;
   }
   render() {
     let result = {
       chart: [
-        ['Count', 'Tweets', 'Likes'],
+        ['Count', 'Tweets', 'Retweets'],
       ],
-      likes: 0,
+      retweets: 0,
       tweets: 0,
     };
     for (let i = 0; i < this.props.tweets.length; i++) {
@@ -38,8 +38,8 @@ class LT extends React.Component {
     return (
       <Row>
         <Col md={12}>
-          <h6><b>Likes & Tweets</b></h6>
-          <p style={{ fontSize: 14 }}>Number of likes and tweets per day. In this chart, you can see how much of a user has come up with per activity per day.</p>
+          <h6><b>Retweets & Tweets</b></h6>
+          <p style={{ fontSize: 14 }}>Number of retweets and tweets per day. In this chart, you can see how much of a user has come up with per activity per day.</p>
         </Col>
         <Col md={12}>
           <Chart
@@ -50,7 +50,7 @@ class LT extends React.Component {
             options={{
               chartArea: { width: '70%' },
               hAxis: {
-                title: 'Likes & Tweets',
+                title: 'Retweets & Tweets',
                 minValue: 0,
               },
               vAxis: {
@@ -63,8 +63,8 @@ class LT extends React.Component {
         <Col md={12}>
           <Table>
             <tr>
-              <th>total likes</th>
-              <td>{result.likes}</td>
+              <th>total retweets</th>
+              <td>{result.retweets}</td>
             </tr>
             <tr>
               <th>total tweets</th>
@@ -77,4 +77,4 @@ class LT extends React.Component {
   }
 }
 
-export default LT;
+export default RT;
