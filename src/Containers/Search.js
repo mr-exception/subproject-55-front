@@ -6,6 +6,10 @@ class Search extends React.Component {
     const query = document.getElementById('query').value;
     this.props.search(query)
   }
+  handleKeyDown = (e) => {
+    if(e.keyCode == 13)
+      this.execute();
+  }
   render() {
     return (
       <Container>
@@ -22,6 +26,7 @@ class Search extends React.Component {
                 placeholder="Enter username ..."
                 aria-label="Enter username ..."
                 aria-describedby="ats"
+                onKeyDown={this.handleKeyDown}
               />
               <InputGroup.Append>
                 <Button variant="outline-primary" onClick={this.execute}>Search</Button>

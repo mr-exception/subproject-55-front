@@ -5,7 +5,6 @@ class Person extends React.Component {
     data: this.props.data,
   }
   render() {
-    console.log(this.state.data);
     const ca = new Date((this.state.data || {}).created_at) // created at
     return (
       <Col md={12} style={{ marginTop: 5 }}>

@@ -92,7 +92,7 @@ class Visual extends React.Component {
                     </Row>
                   </Col>
                 </Row>
-                <Row style={{marginTop: 10}}>
+                <Row style={{ marginTop: 10 }}>
                   <Col md={12}>{this.state.profile.description}</Col>
                 </Row>
                 <Row style={{ marginTop: 25 }}>
@@ -127,9 +127,9 @@ class Visual extends React.Component {
               <Card.Body>
                 <Tabs defaultActiveKey="reports" id="uncontrolled-tab-example">
                   <Tab eventKey="reports" title="Reports">
-                    <Row style={{marginTop: 25}}>
+                    <Row style={{ marginTop: 25 }}>
                       <Col md={12}>
-                        <LT />
+                        <LT tweets={this.state.tweets} />
                       </Col>
                     </Row>
                   </Tab>
