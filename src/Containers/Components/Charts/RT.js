@@ -62,14 +62,16 @@ class RT extends React.Component {
         </Col>
         <Col md={12}>
           <Table>
-            <tr>
-              <th>total retweets</th>
-              <td>{result.retweets}</td>
-            </tr>
-            <tr>
-              <th>total tweets</th>
-              <td>{result.tweets}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th>total retweets</th>
+                <td>{result.retweets}</td>
+              </tr>
+              <tr>
+                <th>total tweets</th>
+                <td>{result.tweets}</td>
+              </tr>
+            </tbody>
           </Table>
         </Col>
       </Row>

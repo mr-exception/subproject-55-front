@@ -5,6 +5,7 @@ import LT from './Components/Charts/LT';
 import RT from './Components/Charts/RT';
 import Tweet from './Components/Tweet';
 import Person from './Components/Person';
+import MultiLR from './Components/Charts/MultiLR';
 
 class Visual extends React.Component {
   state = {
@@ -75,55 +76,59 @@ class Visual extends React.Component {
     return (
       <Container>
         <Row style={{ marginTop: 100 }} className="justify-content-center">
-          <Col md={4} sm={12} xs={12}>
+          <Col md={12} sm={12} xs={12}>
             <Card>
               <Card.Body>
                 <Row>
                   <Col md={6} sm={12}>
-                    <Image className="col-12" src={this.state.profile.profile_image_url_https.replace('_normal', '')} roundedCircle />
-                  </Col>
-                  <Col md={6} sm={12}>
                     <Row>
-                      <Col md={12}>
-                        <a href={`https://twitter.com/${this.state.profile.screen_name}`}>@{this.state.profile.screen_name}</a>
+                      <Col md={6} sm={12}>
+                        <Image className="col-12" src={this.state.profile.profile_image_url_https.replace('_normal', '')} roundedCircle />
                       </Col>
-                      <Col md={12}>
-                        {this.state.profile.name}
+                      <Col md={6} sm={12}>
+                        <Row>
+                          <Col md={12}>
+                            <a href={`https://twitter.com/${this.state.profile.screen_name}`}>@{this.state.profile.screen_name}</a>
+                          </Col>
+                          <Col md={12}>
+                            {this.state.profile.name}
+                          </Col>
+                          <Col md={12}>{this.state.profile.description}</Col>
+                        </Row>
                       </Col>
                     </Row>
                   </Col>
-                </Row>
-                <Row style={{ marginTop: 10 }}>
-                  <Col md={12}>{this.state.profile.description}</Col>
-                </Row>
-                <Row style={{ marginTop: 25 }}>
-                  <Col md={12}>
-                    <Table>
-                      <tbody>
-                        <tr>
-                          <td>followers</td>
-                          <td>{this.state.profile.followers_count}</td>
-                        </tr>
-                        <tr>
-                          <td>friends</td>
-                          <td>{this.state.profile.friends_count}</td>
-                        </tr>
-                        <tr>
-                          <td>tweets</td>
-                          <td>{this.state.profile.statuses_count}</td>
-                        </tr>
-                        <tr>
-                          <td>favorites</td>
-                          <td>{this.state.profile.favourites_count}</td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                  <Col md={6} sm={12}>
+                    <Row style={{ marginTop: 25 }}>
+                      <Col md={12}>
+                        <Table>
+                          <tbody>
+                            <tr>
+                              <td>followers</td>
+                              <td>{this.state.profile.followers_count}</td>
+                            </tr>
+                            <tr>
+                              <td>friends</td>
+                              <td>{this.state.profile.friends_count}</td>
+                            </tr>
+                            <tr>
+                              <td>tweets</td>
+                              <td>{this.state.profile.statuses_count}</td>
+                            </tr>
+                            <tr>
+                              <td>favorites</td>
+                              <td>{this.state.profile.favourites_count}</td>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
               </Card.Body>
             </Card>
           </Col>
-          <Col md={8} sm={12} xs={12}>
+          <Col style={{ marginTop: 15 }} md={12} sm={12} xs={12}>
             <Card>
               <Card.Body>
                 <Tabs defaultActiveKey="reports" id="uncontrolled-tab-example">
@@ -132,6 +137,7 @@ class Visual extends React.Component {
                       <Col md={12}>
                         <LT tweets={this.state.tweets} />
                         <RT tweets={this.state.tweets} />
+                        <MultiLR tweets={this.state.tweets} />
                       </Col>
                     </Row>
                   </Tab>
