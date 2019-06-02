@@ -135,9 +135,9 @@ class Visual extends React.Component {
                   <Tab eventKey="reports" title="Reports">
                     <Row style={{ marginTop: 25 }}>
                       <Col md={12}>
-                        <LT tweets={this.state.tweets} />
-                        <RT tweets={this.state.tweets} />
-                        <MultiLR tweets={this.state.tweets} />
+                        <LT/>
+                        <RT/>
+                        <MultiLR/>
                       </Col>
                     </Row>
                   </Tab>

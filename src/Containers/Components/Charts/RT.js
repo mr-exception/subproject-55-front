@@ -1,37 +1,18 @@
 import React from 'react';
 import Chart from 'react-google-charts';
 import { Row, Col, Table } from 'react-bootstrap';
+import { getDailyCount, getRetweetsCount, getTweetsCount } from '../../../Libs/thinker';
 /**
  * retweets and tweets charts in co-operative
  */
 class RT extends React.Component {
-  add_to_result = (result, tweet) => {
-    let created_at = new Date(tweet.created_at);
-    created_at = `${created_at.getFullYear()}/${created_at.getMonth()}/${created_at.getDate()}`;
-    for (let i = 0; i < result.chart.length; i++) {
-      if (result.chart[i][0] === created_at) {
-        result.chart[i][1]++;
-        result.chart[i][2] += tweet.retweet_count;
-        result.retweets += tweet.retweet_count;
-        result.tweets += 1;
-        return result;
-      }
-    }
-    result.chart.push([created_at, 1, tweet.retweet_count]);
-    return result;
-  }
   render() {
-    let result = {
-      chart: [
-        ['Count', 'Tweets', 'Retweets'],
-      ],
-      retweets: 0,
-      tweets: 0,
-    };
-    for (let i = 0; i < this.props.tweets.length; i++) {
-      const tweet = this.props.tweets[i];
-      if (!tweet.full_text.startsWith("RT"))
-        result = this.add_to_result(result, tweet);
+    let result = [
+      ['Count', 'Tweets', 'Retweets'],
+    ];
+    const daily_chart = getDailyCount();
+    for (let i = 0; i < daily_chart.length; i++) {
+      result.push([daily_chart[i].created_at, daily_chart[i].tweet_count, daily_chart[i].retweet_count])
     }
     if (result.length === 1)
       result.push(['-', 0, 0]);
@@ -46,7 +27,7 @@ class RT extends React.Component {
             height={400}
             chartType="Bar"
             loader={<div>Loading Chart</div>}
-            data={result.chart}
+            data={result}
             options={{
               chartArea: { width: '70%' },
               hAxis: {
@@ -65,11 +46,11 @@ class RT extends React.Component {
             <tbody>
               <tr>
                 <th>total retweets</th>
-                <td>{result.retweets}</td>
+                <td>{getRetweetsCount()}</td>
               </tr>
               <tr>
                 <th>total tweets</th>
-                <td>{result.tweets}</td>
+                <td>{getTweetsCount()}</td>
               </tr>
             </tbody>
           </Table>

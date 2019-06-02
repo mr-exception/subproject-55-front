@@ -1,24 +1,19 @@
 import React from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
-import PubSub from 'pubsub-js';
+import {getFavoritesCount, getTweetsCount, getRetweetsCount} from '../../../Libs/thinker';
 /**
  * some informations about Likes and Retweets got about per tweet
  */
 class MultiLR extends React.Component {
+  state = {
+    favorite_count: 0,
+    retweet_count: 0,
+    tweet_count: 0,
+  }
+
   render() {
-    let lpt = 0; // likes per tweet
-    let rpt = 0; // likes per tweet
-    let count = 0;
-    for (let i = 0; i < this.props.tweets.length; i++) {
-      const tweet = this.props.tweets[i];
-      if (tweet.full_text.startsWith("RT"))
-        continue;
-      lpt += tweet.favorite_count;
-      rpt += tweet.retweet_count;
-      count += 1;
-    }
-    lpt /= count;
-    rpt /= count;
+    let lpt = getFavoritesCount() / getTweetsCount();
+    let rpt = getRetweetsCount() / getTweetsCount();
 
     lpt = lpt.toFixed(2);
     rpt = rpt.toFixed(2);
