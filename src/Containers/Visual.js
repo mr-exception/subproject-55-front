@@ -6,10 +6,10 @@ import RT from './Components/Charts/RT';
 import Tweet from './Components/Tweet';
 import Person from './Components/Person';
 import MultiLR from './Components/Charts/MultiLR';
+import thinker from '../Libs/thinker';
 
 class Visual extends React.Component {
   state = {
-    profile: this.props.data.profile,
     tweets: this.props.data.tweets || [],
     followers: this.props.data.followers || [],
     friends: this.props.data.friends || [],
@@ -21,9 +21,10 @@ class Visual extends React.Component {
     }
   }
   turnTweetsPage = (page) => {
+    const profile = thinker.getProfile();
     const pagination = this.state.pagination;
     if (page * 10 >= this.state.tweets.length - 35) {
-      get_tweets(this.state.profile.screen_name, Math.ceil(page / 20) + 1, (tweets) => {
+      get_tweets(profile.screen_name, Math.ceil(page / 20) + 1, (tweets) => {
         let old_list = this.state.tweets;
         old_list = old_list.concat(tweets);
         this.setState({ tweets: old_list });
@@ -39,9 +40,10 @@ class Visual extends React.Component {
     });
   }
   turnFollowersPage = (page) => {
+    const profile = thinker.getProfile();
     const pagination = this.state.pagination;
     if (page * 10 >= this.state.followers.length - 35)
-      get_followers(this.state.profile.screen_name, page + 1, (followers) => {
+      get_followers(profile.screen_name, page + 1, (followers) => {
         let old_list = this.state.followers;
         old_list = old_list.concat(followers);
         this.setState({ followers: old_list });
@@ -56,9 +58,10 @@ class Visual extends React.Component {
     });
   }
   turnFriendsPage = (page) => {
+    const profile = thinker.getProfile();
     const pagination = this.state.pagination;
     if (page * 10 >= this.state.friends.length - 35)
-      get_friends(this.state.profile.screen_name, page + 1, (friends) => {
+      get_friends(profile.screen_name, page + 1, (friends) => {
         let old_list = this.state.friends;
         old_list = old_list.concat(friends);
         this.setState({ friends: old_list });
@@ -73,6 +76,7 @@ class Visual extends React.Component {
     });
   }
   render() {
+    const profile = thinker.getProfile();
     return (
       <Container>
         <Row style={{ marginTop: 100 }} className="justify-content-center">
@@ -83,17 +87,17 @@ class Visual extends React.Component {
                   <Col md={6} sm={12}>
                     <Row>
                       <Col md={6} sm={12}>
-                        <Image className="col-12" src={this.state.profile.profile_image_url_https.replace('_normal', '')} roundedCircle />
+                        <Image className="col-12" src={profile.profile_image_url_https.replace('_normal', '')} roundedCircle />
                       </Col>
                       <Col md={6} sm={12}>
                         <Row>
                           <Col md={12}>
-                            <a href={`https://twitter.com/${this.state.profile.screen_name}`}>@{this.state.profile.screen_name}</a>
+                            <a href={`https://twitter.com/${profile.screen_name}`}>@{profile.screen_name}</a>
                           </Col>
                           <Col md={12}>
-                            {this.state.profile.name}
+                            {profile.name}
                           </Col>
-                          <Col md={12}>{this.state.profile.description}</Col>
+                          <Col md={12}>{profile.description}</Col>
                         </Row>
                       </Col>
                     </Row>
@@ -105,19 +109,19 @@ class Visual extends React.Component {
                           <tbody>
                             <tr>
                               <td>followers</td>
-                              <td>{this.state.profile.followers_count}</td>
+                              <td>{profile.followers_count}</td>
                             </tr>
                             <tr>
                               <td>friends</td>
-                              <td>{this.state.profile.friends_count}</td>
+                              <td>{profile.friends_count}</td>
                             </tr>
                             <tr>
                               <td>tweets</td>
-                              <td>{this.state.profile.statuses_count}</td>
+                              <td>{profile.statuses_count}</td>
                             </tr>
                             <tr>
                               <td>favorites</td>
-                              <td>{this.state.profile.favourites_count}</td>
+                              <td>{profile.favourites_count}</td>
                             </tr>
                           </tbody>
                         </Table>
