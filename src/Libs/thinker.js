@@ -16,6 +16,8 @@ let followers_fetch_completed = false;
 let friends_fetch_completed = false;
 let tweets_fetch_completed = false;
 
+let most_freq_replies = [];
+
 let profile = null;
 
 const generateCountsInDay = (tweets_arr) => {
@@ -52,6 +54,8 @@ const process = (data) => {
   followers = data.followers;
   friends = data.friends;
   profile = data.profile;
+
+  call_event('tweets_changed');
 }
 /**
  * @author mr-exception
@@ -200,9 +204,15 @@ const flush_events = (action) => {
     return false;
   }
 }
+/**
+ * @author mr-exception
+ * @param {string} action 
+ * @description calls all callbacks for a single event
+ */
 const call_event = (action) => {
   switch (action) {
     case 'tweets_changed':
+      fill_most_replies();
       callbacks[action].forEach((callback) => {
         callback(tweets);
       });
@@ -221,7 +231,10 @@ const call_event = (action) => {
       break;
   }
 }
-
+/**
+ * @author mr-exception
+ * @description fetches new tweets, if last fetch was empty, then flag `tweets_fetch_completed` changes to true and next exapnd operation'll be void
+ */
 const expand_tweets = () => {
   if (tweets_fetch_completed)
     return;
@@ -232,7 +245,7 @@ const expand_tweets = () => {
       tweets = tweets.concat(new_tweets);
       call_event('tweets_changed');
     }
-    if (new_tweets.length == 0) {
+    if (new_tweets.length === 0) {
       tweets_fetch_completed = true;
     }
   }, () => {
@@ -241,6 +254,10 @@ const expand_tweets = () => {
     console.log('network error happened');
   });
 }
+/**
+ * @author mr-exception
+ * @description fetches new friends, if last fetch was empty, then flag `friends_fetch_completed` changes to true and next exapnd operation'll be void
+ */
 const expand_friends = () => {
   if (friends_fetch_completed)
     return;
@@ -251,7 +268,7 @@ const expand_friends = () => {
       friends = friends.concat(new_friends);
       call_event('friends_changed');
     }
-    if (new_friends.length == 0) {
+    if (new_friends.length === 0) {
       friends_fetch_completed = true;
     }
   }, () => {
@@ -260,6 +277,10 @@ const expand_friends = () => {
     console.log('network error happened');
   });
 }
+/**
+ * @author mr-exception
+ * @description fetches new followers, if last fetch was empty, then flag `followers_fetch_completed` changes to true and next exapnd operation'll be void
+ */
 const expand_followers = () => {
   if (followers_fetch_completed)
     return;
@@ -270,7 +291,7 @@ const expand_followers = () => {
       followers = followers.concat(new_followers);
       call_event('followers_changed');
     }
-    if (new_followers.length == 0) {
+    if (new_followers.length === 0) {
       followers_fetch_completed = true;
     }
   }, () => {
@@ -278,6 +299,41 @@ const expand_followers = () => {
   }, () => {
     console.log('network error happened');
   });
+}
+/**
+ * @author mr-exception
+ * @description calculates the most replies by user and stores the results in `most_freq_replies` in schema {id, screen_name, count}
+ */
+const fill_most_replies = () => {
+  for (let i = 0; i < tweets.length; i++) {
+    if (tweets[i].in_reply_to_screen_name == null)
+      continue;
+    let found = false;
+    for (let j = 0; j < most_freq_replies.length; j++) {
+      if (most_freq_replies[j].screen_name === tweets[i].in_reply_to_screen_name) {
+        most_freq_replies[j].count += 1;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      most_freq_replies.push({
+        screen_name: tweets[i].in_reply_to_screen_name,
+        id: tweets[i].in_reply_to_user_id_str,
+        count: 1,
+      });
+    }
+  }
+  most_freq_replies.sort((a, b) => {
+    return b.count - a.count;
+  });
+}
+/**
+ * @author mr-exception
+ * @description returns `most_freq_replise`
+ */
+const getMostFreqReplies = () => {
+  return most_freq_replies;
 }
 module.exports = {
   process,
@@ -303,9 +359,12 @@ module.exports = {
   setProfile,
 
   add_event,
+  call_event,
   flush_events,
 
   expand_tweets,
   expand_followers,
   expand_friends,
+
+  getMostFreqReplies,
 }

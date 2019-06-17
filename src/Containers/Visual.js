@@ -5,6 +5,7 @@ import RT from './Components/Charts/RT';
 import Tweet from './Components/Tweet';
 import Person from './Components/Person';
 import MultiLR from './Components/Charts/MultiLR';
+import MostFreqReps from './Components/Charts/MostFreqReps';
 import Thinker from '../Libs/thinker.js';
 
 class Visual extends React.Component {
@@ -133,6 +134,7 @@ class Visual extends React.Component {
                         <LT />
                         <RT />
                         <MultiLR />
+                        <MostFreqReps />
                       </Col>
                     </Row>
                   </Tab>
