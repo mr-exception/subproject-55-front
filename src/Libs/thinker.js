@@ -1,3 +1,8 @@
+const twiiter = require('./twitter');
+/**
+ * data storage
+ * here is all data that tina needs to work with
+ */
 let favorite_count = 0;
 let retweet_count = 0;
 let tweet_count = 0;
@@ -6,6 +11,11 @@ let daily_counts = [];
 let followers = [];
 let friends = [];
 let tweets = [];
+
+let followers_fetch_completed = false;
+let friends_fetch_completed = false;
+let tweets_fetch_completed = false;
+
 let profile = null;
 
 const generateCountsInDay = (tweets_arr) => {
@@ -43,8 +53,6 @@ const process = (data) => {
   friends = data.friends;
   profile = data.profile;
 }
-
-
 /**
  * @author mr-exception
  * @description get favorites count (total in evert tweet)
@@ -142,7 +150,6 @@ const getFriends = () => {
 const getFollowers = () => {
   return followers;
 }
-
 /**
  * @author mr-exception
  * @description gets profile object stored in thinker
@@ -156,6 +163,121 @@ const getProfile = () => {
  */
 const setProfile = (profile_new) => {
   profile = profile_new
+}
+/**
+ * Events
+ * event pushers and fire core handles any change in data store, notifies to all callbacks
+ */
+const callbacks = {
+  'tweets_changed': [],
+  'friends_changed': [],
+  'followers_changed': [],
+}
+/**
+ * @author mr-exception
+ * @param {string} action 
+ * @param {function} callback 
+ * @description attaches a new callback to events
+ */
+const add_event = (action, callback) => {
+  if (action in callbacks) {
+    callbacks[action].push(callback);
+    return true;
+  } else {
+    return false;
+  }
+}
+/**
+ * @author mr-exception
+ * @param {string} action
+ * @description flushes the action event
+ */
+const flush_events = (action) => {
+  if (action in callbacks) {
+    callbacks[action] = [];
+    return true;
+  } else {
+    return false;
+  }
+}
+const call_event = (action) => {
+  switch (action) {
+    case 'tweets_changed':
+      callbacks[action].forEach((callback) => {
+        callback(tweets);
+      });
+      break;
+    case 'followers_changed':
+      callbacks[action].forEach((callback) => {
+        callback(followers);
+      });
+      break;
+    case 'friends_changed':
+      callbacks[action].forEach((callback) => {
+        callback(friends);
+      });
+      break;
+    default:
+      break;
+  }
+}
+
+const expand_tweets = () => {
+  if (tweets_fetch_completed)
+    return;
+  const count = tweets.length;
+  const page = Math.ceil(count / 200);
+  twiiter.get_tweets(profile.screen_name, page + 1, (new_tweets) => {
+    if (count === tweets.length) {
+      tweets = tweets.concat(new_tweets);
+      call_event('tweets_changed');
+    }
+    if (new_tweets.length == 0) {
+      tweets_fetch_completed = true;
+    }
+  }, () => {
+    console.log('user not found');
+  }, () => {
+    console.log('network error happened');
+  });
+}
+const expand_friends = () => {
+  if (friends_fetch_completed)
+    return;
+  const count = friends.length;
+  const page = Math.ceil(count / 200);
+  twiiter.get_friends(profile.screen_name, page + 1, (new_friends) => {
+    if (count === friends.length) {
+      friends = friends.concat(new_friends);
+      call_event('friends_changed');
+    }
+    if (new_friends.length == 0) {
+      friends_fetch_completed = true;
+    }
+  }, () => {
+    console.log('user not found');
+  }, () => {
+    console.log('network error happened');
+  });
+}
+const expand_followers = () => {
+  if (followers_fetch_completed)
+    return;
+  const count = followers.length;
+  const page = Math.ceil(count / 200);
+  twiiter.get_followers(profile.screen_name, page + 1, (new_followers) => {
+    if (count === followers.length) {
+      followers = followers.concat(new_followers);
+      call_event('followers_changed');
+    }
+    if (new_followers.length == 0) {
+      followers_fetch_completed = true;
+    }
+  }, () => {
+    console.log('user not found');
+  }, () => {
+    console.log('network error happened');
+  });
 }
 module.exports = {
   process,
@@ -179,4 +301,11 @@ module.exports = {
 
   getProfile,
   setProfile,
+
+  add_event,
+  flush_events,
+
+  expand_tweets,
+  expand_followers,
+  expand_friends,
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Chart from 'react-google-charts';
 import { Row, Col, Table } from 'react-bootstrap';
-import { getDailyCount, getFavoritesCount, getTweetsCount } from '../../../Libs/thinker';
+import { getDailyCount, getFavoritesCount, getTweetsCount } from '../../../Libs/thinker.js';
 /**
  * like and tweets charts in co-operative
  */

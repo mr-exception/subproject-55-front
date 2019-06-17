@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
-import {getFavoritesCount, getTweetsCount, getRetweetsCount} from '../../../Libs/thinker';
+import {getFavoritesCount, getTweetsCount, getRetweetsCount} from '../../../Libs/thinker.js';
 /**
  * some informations about Likes and Retweets got about per tweet
  */

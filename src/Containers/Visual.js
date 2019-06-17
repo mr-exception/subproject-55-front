@@ -1,18 +1,18 @@
 import React from 'react';
 import { Container, Row, Col, Table, Card, Tab, Tabs, Image, Button } from 'react-bootstrap';
-import { get_tweets, get_followers, get_friends } from '../Libs/twitter';
 import LT from './Components/Charts/LT';
 import RT from './Components/Charts/RT';
 import Tweet from './Components/Tweet';
 import Person from './Components/Person';
 import MultiLR from './Components/Charts/MultiLR';
-import thinker from '../Libs/thinker';
+import Thinker from '../Libs/thinker.js';
 
 class Visual extends React.Component {
   state = {
-    tweets: this.props.data.tweets || [],
-    followers: this.props.data.followers || [],
-    friends: this.props.data.friends || [],
+    tweets: [],
+    followers: [],
+    friends: [],
+    profile: {},
 
     pagination: {
       tweets: 0,
@@ -21,18 +21,9 @@ class Visual extends React.Component {
     }
   }
   turnTweetsPage = (page) => {
-    const profile = thinker.getProfile();
     const pagination = this.state.pagination;
     if (page * 10 >= this.state.tweets.length - 35) {
-      get_tweets(profile.screen_name, Math.ceil(page / 20) + 1, (tweets) => {
-        let old_list = this.state.tweets;
-        old_list = old_list.concat(tweets);
-        this.setState({ tweets: old_list });
-      }, () => {
-        console.log('user not found')
-      }, () => {
-        console.log('network error happened')
-      });
+      Thinker.expand_tweets();
     }
     pagination.tweets = page;
     this.setState({
@@ -40,43 +31,43 @@ class Visual extends React.Component {
     });
   }
   turnFollowersPage = (page) => {
-    const profile = thinker.getProfile();
     const pagination = this.state.pagination;
-    if (page * 10 >= this.state.followers.length - 35)
-      get_followers(profile.screen_name, page + 1, (followers) => {
-        let old_list = this.state.followers;
-        old_list = old_list.concat(followers);
-        this.setState({ followers: old_list });
-      }, () => {
-        console.log('user not found')
-      }, () => {
-        console.log('network error happened')
-      });
+    if (page * 10 >= this.state.followers.length - 35) {
+      Thinker.expand_followers();
+    }
     pagination.followers = page;
     this.setState({
       pagination
     });
   }
   turnFriendsPage = (page) => {
-    const profile = thinker.getProfile();
     const pagination = this.state.pagination;
-    if (page * 10 >= this.state.friends.length - 35)
-      get_friends(profile.screen_name, page + 1, (friends) => {
-        let old_list = this.state.friends;
-        old_list = old_list.concat(friends);
-        this.setState({ friends: old_list });
-      }, () => {
-        console.log('user not found')
-      }, () => {
-        console.log('network error happened')
-      });
+    if (page * 10 >= this.state.friends.length - 35) {
+      Thinker.expand_friends();
+    }
     pagination.friends = page;
     this.setState({
       pagination
     });
   }
+  componentDidMount() {
+    this.setState({
+      tweets: Thinker.getTweets(),
+      friends: Thinker.getFriends(),
+      followers: Thinker.getFollowers(),
+      profile: Thinker.getProfile(),
+    })
+    Thinker.add_event('tweets_changed', (tweets) => {
+      this.setState({ tweets });
+    });
+    Thinker.add_event('followers_changed', (followers) => {
+      this.setState({ followers });
+    });
+    Thinker.add_event('friends_changed', (friends_changed) => {
+      this.setState({ friends_changed });
+    });
+  }
   render() {
-    const profile = thinker.getProfile();
     return (
       <Container>
         <Row style={{ marginTop: 100 }} className="justify-content-center">
@@ -87,17 +78,17 @@ class Visual extends React.Component {
                   <Col md={6} sm={12}>
                     <Row>
                       <Col md={6} sm={12}>
-                        <Image className="col-12" src={profile.profile_image_url_https.replace('_normal', '')} roundedCircle />
+                        <Image className="col-12" src={(this.state.profile.profile_image_url_https || '').replace('_normal', '')} roundedCircle />
                       </Col>
                       <Col md={6} sm={12}>
                         <Row>
                           <Col md={12}>
-                            <a href={`https://twitter.com/${profile.screen_name}`}>@{profile.screen_name}</a>
+                            <a href={`https://twitter.com/${this.state.profile.screen_name}`}>@{this.state.profile.screen_name}</a>
                           </Col>
                           <Col md={12}>
-                            {profile.name}
+                            {this.state.profile.name}
                           </Col>
-                          <Col md={12}>{profile.description}</Col>
+                          <Col md={12}>{this.state.profile.description}</Col>
                         </Row>
                       </Col>
                     </Row>
@@ -109,19 +100,19 @@ class Visual extends React.Component {
                           <tbody>
                             <tr>
                               <td>followers</td>
-                              <td>{profile.followers_count}</td>
+                              <td>{this.state.profile.followers_count}</td>
                             </tr>
                             <tr>
                               <td>friends</td>
-                              <td>{profile.friends_count}</td>
+                              <td>{this.state.profile.friends_count}</td>
                             </tr>
                             <tr>
                               <td>tweets</td>
-                              <td>{profile.statuses_count}</td>
+                              <td>{this.state.profile.statuses_count}</td>
                             </tr>
                             <tr>
                               <td>favorites</td>
-                              <td>{profile.favourites_count}</td>
+                              <td>{this.state.profile.favourites_count}</td>
                             </tr>
                           </tbody>
                         </Table>
@@ -139,9 +130,9 @@ class Visual extends React.Component {
                   <Tab eventKey="reports" title="Reports">
                     <Row style={{ marginTop: 25 }}>
                       <Col md={12}>
-                        <LT/>
-                        <RT/>
-                        <MultiLR/>
+                        <LT />
+                        <RT />
+                        <MultiLR />
                       </Col>
                     </Row>
                   </Tab>
