@@ -19,7 +19,7 @@ class LT extends React.Component {
     return (
       <Row>
         <Col md={12}>
-          <h6><b>Likes & Tweets</b></h6>
+          <h5><b>Likes & Tweets</b></h5>
           <p style={{ fontSize: 14 }}>Number of likes and tweets per day. In this chart, you can see how much of a user has come up with per activity per day.</p>
         </Col>
         <Col md={12}>

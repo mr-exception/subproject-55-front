@@ -32,7 +32,7 @@ class App extends React.Component {
       case 'searching':
         return <Loading query={this.state.query} failed={this.search_failed} finished={this.loading_finished} />;
       case 'visual':
-        return <Visual />
+        return <Visual search={this.search} />
       default:
         return '...';
     }

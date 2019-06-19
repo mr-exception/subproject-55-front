@@ -20,7 +20,7 @@ class MultiLR extends React.Component {
     return (
       <Row>
         <Col md={12}>
-          <h6><b>More Informations</b></h6>
+          <h5><b>More Informations</b></h5>
           <p style={{ fontSize: 14 }}>More information is provided in the table below. All the numbers obtained are calculated through the active and public tweets of the user. Note that for more accurate reporting, you need to have more data from the user. For more data, you need a stronger computer and more resources.</p>
         </Col>
         <Col md={12}>

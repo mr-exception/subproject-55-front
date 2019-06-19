@@ -306,7 +306,9 @@ const expand_followers = () => {
  */
 const fill_most_replies = () => {
   for (let i = 0; i < tweets.length; i++) {
-    if (tweets[i].in_reply_to_screen_name == null)
+    if (tweets[i].in_reply_to_screen_name === null)
+      continue;
+    if (tweets[i].in_reply_to_screen_name === profile.screen_name)
       continue;
     let found = false;
     for (let j = 0; j < most_freq_replies.length; j++) {

@@ -18,7 +18,7 @@ class MostFreqReps extends React.Component {
     return (
       <Row>
         <Col md={12}>
-          <h6><b>Most Replied users</b></h6>
+          <h5><b>Most Replied users</b></h5>
           <p style={{ fontSize: 14 }}>Users have made comments on additional user tweets or you have more comments on their tweets. Ranked as a score on this table. (Only five users with more points are displayed).</p>
         </Col>
         <Col md={12}>

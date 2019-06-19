@@ -19,7 +19,7 @@ class RT extends React.Component {
     return (
       <Row>
         <Col md={12}>
-          <h6><b>Retweets & Tweets</b></h6>
+          <h5><b>Retweets & Tweets</b></h5>
           <p style={{ fontSize: 14 }}>Number of retweets and tweets per day. In this chart, you can see how much of a user has come up with per activity per day.</p>
         </Col>
         <Col md={12}>

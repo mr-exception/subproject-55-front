@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Table, Card, Tab, Tabs, Image, Button } from 'react-bootstrap';
+import { Container, Row, Col, Table, Card, Tab, Tabs, Image, Button, InputGroup, FormControl, } from 'react-bootstrap';
 import LT from './Components/Charts/LT';
 import RT from './Components/Charts/RT';
 import Tweet from './Components/Tweet';
@@ -7,6 +7,7 @@ import Person from './Components/Person';
 import MultiLR from './Components/Charts/MultiLR';
 import MostFreqReps from './Components/Charts/MostFreqReps';
 import Thinker from '../Libs/thinker.js';
+import Space from './Components/Space';
 
 class Visual extends React.Component {
   state = {
@@ -68,10 +69,34 @@ class Visual extends React.Component {
       this.setState({ friends_changed });
     });
   }
+  execute = () => {
+    const query = document.getElementById('query').value;
+    this.props.search(query)
+  }
+  handleKeyDown = (e) => {
+    if (e.keyCode === 13)
+      this.execute();
+  }
   render() {
     return (
-      <Container>
-        <Row style={{ marginTop: 100 }} className="justify-content-center">
+      <Container><
+        Row style={{ marginTop: 50 }} className="justify-content-center">
+        <Col md={12} xs={12}>
+          <InputGroup size="lg" className="mb-3">
+            <FormControl
+              id="query"
+              placeholder="Enter username ..."
+              aria-label="Enter username ..."
+              aria-describedby="ats"
+              onKeyDown={this.handleKeyDown}
+            />
+            <InputGroup.Append>
+              <Button variant="outline-primary" onClick={this.execute}>Search</Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </Col>
+      </Row>
+        <Row className="justify-content-center">
           <Col md={12} sm={12} xs={12}>
             <Card>
               <Card.Body>
@@ -90,6 +115,9 @@ class Visual extends React.Component {
                             {this.state.profile.name}
                           </Col>
                           <Col md={12}>{this.state.profile.description}</Col>
+                          <Col md={12} style={{ marginTop: 15 }}>
+                            <Button outline="info">fetch more data</Button>
+                          </Col>
                         </Row>
                       </Col>
                     </Row>
@@ -124,17 +152,20 @@ class Visual extends React.Component {
               </Card.Body>
             </Card>
           </Col>
-          <Col style={{ marginTop: 15 }} md={12} sm={12} xs={12}>
+          <Col style={{ marginTop: 15, marginBottom: 40 }} md={12} sm={12} xs={12}>
             <Card>
               <Card.Body>
                 <Tabs defaultActiveKey="reports" id="uncontrolled-tab-example">
                   <Tab eventKey="reports" title="Reports">
                     <Row style={{ marginTop: 25 }}>
                       <Col md={12}>
-                        <LT />
-                        <RT />
-                        <MultiLR />
-                        <MostFreqReps />
+                        <LT/>
+                        <Space />
+                        <RT/>
+                        <Space />
+                        <MultiLR/>
+                        <Space />
+                        <MostFreqReps/>
                       </Col>
                     </Row>
                   </Tab>
