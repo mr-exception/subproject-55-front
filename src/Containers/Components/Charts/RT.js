@@ -2,10 +2,16 @@ import React from 'react';
 import Chart from 'react-google-charts';
 import { Row, Col, Table } from 'react-bootstrap';
 import { getDailyCount, getRetweetsCount, getTweetsCount } from '../../../Libs/thinker.js';
+import Thinker from '../../../Libs/thinker.js';
 /**
  * retweets and tweets charts in co-operative
  */
 class RT extends React.Component {
+  componentDidMount() {
+    Thinker.add_event('tweets_changed', (tweets) => {
+      this.render();
+    });
+  }
   render() {
     let result = [
       ['Count', 'Tweets', 'Retweets'],

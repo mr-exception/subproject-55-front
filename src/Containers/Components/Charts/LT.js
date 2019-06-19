@@ -2,10 +2,16 @@ import React from 'react';
 import Chart from 'react-google-charts';
 import { Row, Col, Table } from 'react-bootstrap';
 import { getDailyCount, getFavoritesCount, getTweetsCount } from '../../../Libs/thinker.js';
+import Thinker from '../../../Libs/thinker';
 /**
  * like and tweets charts in co-operative
  */
 class LT extends React.Component {
+  componentDidMount() {
+    Thinker.add_event('tweets_changed', (tweets) => {
+      this.render();
+    });
+  }
   render() {
     let result = [
       ['Count', 'Tweets', 'Likes'],

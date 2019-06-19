@@ -77,6 +77,11 @@ class Visual extends React.Component {
     if (e.keyCode === 13)
       this.execute();
   }
+  fetch_more_data = () => {
+    Thinker.expand_followers();
+    Thinker.expand_friends();
+    Thinker.expand_tweets();
+  }
   render() {
     return (
       <Container><
@@ -116,7 +121,7 @@ class Visual extends React.Component {
                           </Col>
                           <Col md={12}>{this.state.profile.description}</Col>
                           <Col md={12} style={{ marginTop: 15 }}>
-                            <Button outline="info">fetch more data</Button>
+                            <Button outline="info" onClick={this.fetch_more_data}>fetch more data</Button>
                           </Col>
                         </Row>
                       </Col>

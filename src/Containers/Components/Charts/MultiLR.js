@@ -1,16 +1,16 @@
 import React from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
-import {getFavoritesCount, getTweetsCount, getRetweetsCount} from '../../../Libs/thinker.js';
+import Thinker from '../../../Libs/thinker.js';
+import { getFavoritesCount, getTweetsCount, getRetweetsCount } from '../../../Libs/thinker.js';
 /**
  * some informations about Likes and Retweets got about per tweet
  */
 class MultiLR extends React.Component {
-  state = {
-    favorite_count: 0,
-    retweet_count: 0,
-    tweet_count: 0,
+  componentDidMount() {
+    Thinker.add_event('tweets_changed', (tweets) => {
+      this.render();
+    });
   }
-
   render() {
     let lpt = getFavoritesCount() / getTweetsCount();
     let rpt = getRetweetsCount() / getTweetsCount();

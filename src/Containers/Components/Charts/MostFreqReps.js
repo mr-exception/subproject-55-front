@@ -5,8 +5,13 @@ import Thinker from '../../../Libs/thinker.js';
  * table of most frequent replies sorted by users
  */
 class MostFreqReps extends React.Component {
-  state = {
-    list: Thinker.getMostFreqReplies().slice(0, 5),
+  componentDidMount() {
+    Thinker.add_event('tweets_changed', (tweets) => {
+      this.setState({
+        list: Thinker.getMostFreqReplies().slice(0, 5),
+      })
+      this.render();
+    });
   }
   componentDidMount() {
     Thinker.add_event('tweets_changed', (tweets) => {
