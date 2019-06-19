@@ -6,6 +6,7 @@ import Tweet from './Components/Tweet';
 import Person from './Components/Person';
 import MultiLR from './Components/Charts/MultiLR';
 import MostFreqReps from './Components/Charts/MostFreqReps';
+import MostFreqTags from './Components/Charts/MostFreqTags';
 import Thinker from '../Libs/thinker.js';
 import Space from './Components/Space';
 
@@ -171,6 +172,7 @@ class Visual extends React.Component {
                         <MultiLR/>
                         <Space />
                         <MostFreqReps/>
+                        <MostFreqTags/>
                       </Col>
                     </Row>
                   </Tab>

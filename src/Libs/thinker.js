@@ -17,6 +17,7 @@ let friends_fetch_completed = false;
 let tweets_fetch_completed = false;
 
 let most_freq_replies = [];
+let most_freq_hashtags = [];
 
 let profile = null;
 
@@ -83,6 +84,7 @@ const getTweetsCount = () => {
  * @description get an array from favorite, tweet and retweets count based on day of each tweet
  */
 const getDailyCount = () => {
+  generateCountsInDay(tweets);
   return daily_counts;
 }
 /**
@@ -213,6 +215,7 @@ const call_event = (action) => {
   switch (action) {
     case 'tweets_changed':
       fill_most_replies();
+      fill_most_hashtags();
       callbacks[action].forEach((callback) => {
         callback(tweets);
       });
@@ -337,6 +340,36 @@ const fill_most_replies = () => {
 const getMostFreqReplies = () => {
   return most_freq_replies;
 }
+
+const fill_most_hashtags = () => {
+  for (let i = 0; i < tweets.length; i++) {
+    if (tweets[i].entities.hashtags.length == 0)
+      continue;
+    let found = false;
+    for (let k = 0; k < tweets[i].entities.hashtags.length; k++) {
+      for (let j = 0; j < most_freq_hashtags.length; j++) {
+        if (most_freq_hashtags[j].hashtag === tweets[i].entities.hashtags[k].text) {
+          most_freq_hashtags[j].count += 1;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        most_freq_hashtags.push({
+          hashtag: tweets[i].entities.hashtags[k].text,
+          count: 1,
+        });
+      }
+    }
+  }
+  most_freq_hashtags.sort((a, b) => {
+    return b.count - a.count;
+  });
+}
+
+const getMostFreqHashtags = () => {
+  return most_freq_hashtags;
+}
 module.exports = {
   process,
 
@@ -369,4 +402,5 @@ module.exports = {
   expand_friends,
 
   getMostFreqReplies,
+  getMostFreqHashtags,
 }
