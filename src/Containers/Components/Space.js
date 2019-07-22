@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Image, Table } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 class Space extends React.Component {
 
   render() {
