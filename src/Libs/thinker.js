@@ -343,7 +343,7 @@ const getMostFreqReplies = () => {
 
 const fill_most_hashtags = () => {
   for (let i = 0; i < tweets.length; i++) {
-    if (tweets[i].entities.hashtags.length == 0)
+    if (tweets[i].entities.hashtags.length === 0)
       continue;
     let found = false;
     for (let k = 0; k < tweets[i].entities.hashtags.length; k++) {
