@@ -8,6 +8,7 @@ import MultiLR from './Components/Charts/MultiLR';
 import MostFreqReps from './Components/Charts/MostFreqReps';
 import MostFreqTags from './Components/Charts/MostFreqTags';
 import Thinker from '../Libs/thinker.js';
+import TotalScore from './Components/Charts/TotalScore';
 import Space from './Components/Space';
 
 class Visual extends React.Component {
@@ -181,6 +182,7 @@ class Visual extends React.Component {
                   <Tab eventKey="reports" title="Reports">
                     <Row style={{ marginTop: 25 }}>
                       <Col md={12}>
+                        <TotalScore />
                         <LT/>
                         <Space />
                         <RT/>
