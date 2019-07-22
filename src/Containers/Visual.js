@@ -25,9 +25,13 @@ class Visual extends React.Component {
   }
   turnTweetsPage = (page) => {
     const pagination = this.state.pagination;
-    if (page * 10 >= this.state.tweets.length - 35) {
-      Thinker.expand_tweets();
-    }
+    /**
+     * I think it's not good for client resources
+     * (mr-exception)
+     */
+    // if (page * 10 >= this.state.tweets.length - 35) {
+    //   Thinker.expand_tweets();
+    // }
     pagination.tweets = page;
     this.setState({
       pagination
@@ -35,9 +39,13 @@ class Visual extends React.Component {
   }
   turnFollowersPage = (page) => {
     const pagination = this.state.pagination;
-    if (page * 10 >= this.state.followers.length - 35) {
-      Thinker.expand_followers();
-    }
+    /**
+     * I think it's not good for client resources
+     * (mr-exception)
+     */
+    // if (page * 10 >= this.state.followers.length - 35) {
+    //   Thinker.expand_followers();
+    // }
     pagination.followers = page;
     this.setState({
       pagination
@@ -45,9 +53,13 @@ class Visual extends React.Component {
   }
   turnFriendsPage = (page) => {
     const pagination = this.state.pagination;
-    if (page * 10 >= this.state.friends.length - 35) {
-      Thinker.expand_friends();
-    }
+    /**
+     * I think it's not good for client resources
+     * (mr-exception)
+     */
+    // if (page * 10 >= this.state.friends.length - 35) {
+    //   Thinker.expand_friends();
+    // }
     pagination.friends = page;
     this.setState({
       pagination
@@ -79,9 +91,13 @@ class Visual extends React.Component {
       this.execute();
   }
   fetch_more_data = () => {
-    Thinker.expand_followers();
-    Thinker.expand_friends();
-    Thinker.expand_tweets();
+    /**
+     * I think it's not good for client resources
+     * (mr-exception)
+     */
+    // Thinker.expand_followers();
+    // Thinker.expand_friends();
+    // Thinker.expand_tweets();
   }
   render() {
     return (
@@ -121,9 +137,9 @@ class Visual extends React.Component {
                             {this.state.profile.name}
                           </Col>
                           <Col md={12}>{this.state.profile.description}</Col>
-                          <Col md={12} style={{ marginTop: 15 }}>
+                          {/* <Col md={12} style={{ marginTop: 15 }}>
                             <Button outline="info" onClick={this.fetch_more_data}>fetch more data</Button>
-                          </Col>
+                          </Col> */}
                         </Row>
                       </Col>
                     </Row>
