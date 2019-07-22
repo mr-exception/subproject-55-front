@@ -13,6 +13,9 @@ class MostFreqReps extends React.Component {
       this.setState({ list: Thinker.getMostFreqReplies().slice(0, 5) }, () => {
       });
     });
+    this.setState({
+      list: Thinker.getMostFreqReplies().slice(0, 5),
+    });
   }
   render() {
     return (

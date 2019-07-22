@@ -13,6 +13,9 @@ class MostFreqTags extends React.Component {
       this.setState({ list: Thinker.getMostFreqHashtags().slice(0, 5) }, () => {
       });
     });
+    this.setState({
+      list: Thinker.getMostFreqHashtags().slice(0, 5) 
+    });
   }
   render() {
     return (
