@@ -41,6 +41,14 @@ class WorkSpace:
     def getSize(self):
         return len(self.inputs) + len(self.outputs) + len(self.memory)
 
+    def getInputDecimal(self):
+        input = 0
+        for i, v in enumerate(self.inputs):
+            res = 2**i
+            if v:
+                input += res
+        return input
+
     def getOutputDecimal(self):
         output = 0
         for i, v in enumerate(self.outputs):
