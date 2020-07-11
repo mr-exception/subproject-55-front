@@ -20,11 +20,15 @@ type LogicUnit struct {
 // WorkSpace holds the current information of a running unit machine
 type WorkSpace struct {
 	Input  []bool `json:"input"`
-	Output []bool `json:"output"`
 	Memory []bool `json:"memory"`
+	Output []bool `json:"output"`
 }
 
+// getWorkSpaceBit returns a single bit as boolean by passing the workspace and position of wanted bit
 func getWorkSpaceBit(workSpace WorkSpace, position int64) (bool, error) {
+	if position < 0 {
+		return false, fmt.Errorf("Exception: index %d not found in workspace", position)
+	}
 	var offset int64 = 0
 	if position < int64(len(workSpace.Input)) {
 		return workSpace.Input[position], nil
@@ -39,22 +43,31 @@ func getWorkSpaceBit(workSpace WorkSpace, position int64) (bool, error) {
 	}
 	return false, fmt.Errorf("Exception: index %d not found in workspace", position)
 }
+
+// setWorkSpaceBit sets a bit in workspace by passing WorkSpace, position (int64) and value (bool)
 func setWorkSpaceBit(workSpace WorkSpace, position int64, value bool) error {
+	if position < 0 {
+		return fmt.Errorf("Exception: index %d not found in workspace", position)
+	}
 	var offset int64 = 0
 	if position < int64(len(workSpace.Input)) {
 		workSpace.Input[position] = value
+		return nil
 	}
 	offset += int64(len(workSpace.Input))
 	if position < int64(len(workSpace.Memory))+offset {
 		workSpace.Memory[position-offset] = value
+		return nil
 	}
 	offset += int64(len(workSpace.Memory))
 	if position < int64(len(workSpace.Output))+offset {
 		workSpace.Output[position-offset] = value
+		return nil
 	}
 	return fmt.Errorf("Exception: index %d not found in workspace", position)
 }
 
+// getBoolArrayString get an array of booleans and returns a string to print or store
 func getBoolArrayString(data []bool) string {
 	if len(data) == 0 {
 		return "{}"
@@ -81,14 +94,16 @@ func getBoolArrayString(data []bool) string {
 	return output
 }
 
+// getWorkSpaceString get an WorkSpace and returns a string to prrint or store
 func getWorkSpaceString(workSpace WorkSpace) string {
 	var inputString string = getBoolArrayString(workSpace.Input)
 	var outputString string = getBoolArrayString(workSpace.Output)
 	var memoryString string = getBoolArrayString(workSpace.Memory)
 
-	return fmt.Sprintf("<WorkSpace intput:%s output:%s memory: %s", inputString, outputString, memoryString)
+	return fmt.Sprintf("<WorkSpace input:%s output:%s memory:%s >", inputString, outputString, memoryString)
 }
 
+// runLogicUnit runs a single LogicUnit on a WorkSpace
 func runLogicUnit(workSpace WorkSpace, logicUnit LogicUnit) error {
 	var a, indexAError = getWorkSpaceBit(workSpace, logicUnit.A)
 	if indexAError != nil {
@@ -108,33 +123,17 @@ func runLogicUnit(workSpace WorkSpace, logicUnit LogicUnit) error {
 
 	switch logicUnit.Operation.Operation {
 	case "and":
-		setWorkSpaceBit(workSpace, logicUnit.Output, a && b)
-		return nil
+		var error = setWorkSpaceBit(workSpace, logicUnit.Output, a && b)
+		if error != nil {
+			return error
+		}
+		break
 	case "or":
-		setWorkSpaceBit(workSpace, logicUnit.Output, a || b)
-		return nil
+		var error = setWorkSpaceBit(workSpace, logicUnit.Output, a || b)
+		if error != nil {
+			return error
+		}
+		break
 	}
 	return nil
-}
-
-func main() {
-	fmt.Println("this is logic.go file")
-	var operation = Operation{
-		MaskA:     false,
-		MaskB:     false,
-		Operation: "and",
-	}
-	var logicUnit = LogicUnit{
-		A:         0,
-		B:         0,
-		Output:    1,
-		Operation: operation,
-	}
-	var workSpace = WorkSpace{
-		Input:  []bool{true},
-		Output: []bool{false},
-		Memory: []bool{},
-	}
-	runLogicUnit(workSpace, logicUnit)
-	fmt.Println(getWorkSpaceString(workSpace))
 }
