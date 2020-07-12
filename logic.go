@@ -103,6 +103,18 @@ func getWorkSpaceString(workSpace WorkSpace) string {
 	return fmt.Sprintf("<WorkSpace input:%s output:%s memory:%s >", inputString, outputString, memoryString)
 }
 
+func getLogicUnitString(logicUnit LogicUnit) string {
+	var maskA string = "a"
+	if !logicUnit.Operation.MaskA {
+		maskA = "!a"
+	}
+	var maskB string = "b"
+	if !logicUnit.Operation.MaskB {
+		maskB = "!b"
+	}
+	return fmt.Sprintf("{a: %d, b: %d, output: %d, operation: %s %s %s}", logicUnit.A, logicUnit.B, logicUnit.Output, maskA, logicUnit.Operation.Operation, maskB)
+}
+
 // runLogicUnit runs a single LogicUnit on a WorkSpace
 func runLogicUnit(workSpace WorkSpace, logicUnit LogicUnit) error {
 	var a, indexAError = getWorkSpaceBit(workSpace, logicUnit.A)
