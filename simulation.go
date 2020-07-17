@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
-	"time"
 )
 
 // FitnessFunction is a function type that gets a workspace and returns the fitness score as a float real number
@@ -17,14 +16,12 @@ type UnitProps struct {
 	OutputSize int64 `json:"output_size"`
 }
 
-func getRandomFloat() float64 {
-	s1 := rand.NewSource(time.Now().UnixNano())
-	rnd := rand.New(s1)
-	return rnd.ExpFloat64()
+func getUnitPropsString(unitProps UnitProps) string {
+	return fmt.Sprintf("{input: %d, output: %d, memory: %d}", unitProps.InputSize, unitProps.OutputSize, unitProps.MemorySize)
 }
 
 func getRandomBitIndex(unitProps UnitProps) int64 {
-	return int64(getRandomFloat() * float64(unitProps.InputSize+unitProps.MemorySize+unitProps.OutputSize))
+	return int64(rand.Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize))
 }
 
 func runSingleTest(workSpace WorkSpace, logicUnit LogicUnit, calculateFitness FitnessFunction) (float64, error) {
@@ -35,30 +32,10 @@ func runSingleTest(workSpace WorkSpace, logicUnit LogicUnit, calculateFitness Fi
 	return calculateFitness(workSpace), nil
 }
 
-func createRandomWorkSpace(unitProps UnitProps) WorkSpace {
-	var workSpace = WorkSpace{
-		Input:  []bool{},
-		Output: []bool{},
-		Memory: []bool{},
-	}
-
-	var i int
-	for i = 0; i < int(unitProps.InputSize); i++ {
-		workSpace.Input = append(workSpace.Input, getRandomFloat() < 0.5)
-	}
-	for i = 0; i < int(unitProps.OutputSize); i++ {
-		workSpace.Output = append(workSpace.Output, false)
-	}
-	for i = 0; i < int(unitProps.MemorySize); i++ {
-		workSpace.Memory = append(workSpace.Memory, false)
-	}
-	return workSpace
-}
-
 func testLogicUnit(unitProps UnitProps, logicUnit LogicUnit, calculateFitness FitnessFunction) (float64, error) {
 	var result float64 = 0
 	var workSpace WorkSpace = createRandomWorkSpace(unitProps)
-	fmt.Println(workSpace)
+	fmt.Println(getWorkSpaceString(workSpace))
 	var fitnessValue, err = runSingleTest(workSpace, logicUnit, calculateFitness)
 	if err != nil {
 		return 0, nil
@@ -66,22 +43,6 @@ func testLogicUnit(unitProps UnitProps, logicUnit LogicUnit, calculateFitness Fi
 	result += fitnessValue
 
 	return result, nil
-}
-
-func createRandomLogicUnit(unitProps UnitProps) LogicUnit {
-	var logicUnit = LogicUnit{
-		A: getRandomBitIndex(unitProps),
-		B: getRandomBitIndex(unitProps),
-		Operation: Operation{
-			MaskA:     getRandomFloat() < 0.5,
-			MaskB:     getRandomFloat() < 0.5,
-			Operation: "and",
-		},
-	}
-	if getRandomFloat() < 0.5 {
-		logicUnit.Operation.Operation = "or"
-	}
-	return logicUnit
 }
 
 func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction) {

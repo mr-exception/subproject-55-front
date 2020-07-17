@@ -188,11 +188,12 @@ func TestRunLogicUnit(test *testing.T) {
 		test.Errorf("expected error but sucess")
 	}
 
-	runLogicUnit(WorkSpace{
+	var workSpace1 = WorkSpace{
 		Input:  []bool{true},
 		Memory: []bool{false},
 		Output: []bool{false},
-	}, LogicUnit{
+	}
+	runLogicUnit(workSpace1, LogicUnit{
 		A:      0,
 		B:      0,
 		Output: 2,
@@ -202,13 +203,13 @@ func TestRunLogicUnit(test *testing.T) {
 			Operation: "or",
 		},
 	})
-	if workSpace.Input[0] != true {
-		test.Errorf("expected %t but got %t", true, workSpace.Input[0])
+	if workSpace1.Input[0] != true {
+		test.Errorf("expected %t but got %t", true, workSpace1.Input[0])
 	}
-	if workSpace.Memory[0] != false {
-		test.Errorf("expected %t but got %t", false, workSpace.Memory[0])
+	if workSpace1.Memory[0] != false {
+		test.Errorf("expected %t but got %t", false, workSpace1.Memory[0])
 	}
-	if workSpace.Output[0] != true {
-		test.Errorf("expected %t but got %t", true, workSpace.Output[0])
+	if workSpace1.Output[0] != true {
+		test.Errorf("expected %t but got %t", true, workSpace1.Output[0])
 	}
 }
