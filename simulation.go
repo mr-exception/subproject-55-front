@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"math/rand"
 )
 
 // FitnessFunction is a function type that gets a workspace and returns the fitness score as a float real number
@@ -20,10 +19,6 @@ func getUnitPropsString(unitProps UnitProps) string {
 	return fmt.Sprintf("{input: %d, output: %d, memory: %d}", unitProps.InputSize, unitProps.OutputSize, unitProps.MemorySize)
 }
 
-func getRandomBitIndex(unitProps UnitProps) int64 {
-	return int64(rand.Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize))
-}
-
 func runSingleTest(workSpace WorkSpace, logicUnit LogicUnit, calculateFitness FitnessFunction) (float64, error) {
 	var err = runLogicUnit(workSpace, logicUnit)
 	if err != nil {
@@ -34,25 +29,35 @@ func runSingleTest(workSpace WorkSpace, logicUnit LogicUnit, calculateFitness Fi
 
 func testLogicUnit(unitProps UnitProps, logicUnit LogicUnit, calculateFitness FitnessFunction) (float64, error) {
 	var result float64 = 0
-	var workSpace WorkSpace = createRandomWorkSpace(unitProps)
-	fmt.Println(getWorkSpaceString(workSpace))
-	var fitnessValue, err = runSingleTest(workSpace, logicUnit, calculateFitness)
-	if err != nil {
-		return 0, nil
-	}
-	result += fitnessValue
 
+	var testCase int
+	for testCase = 0; testCase < 50; testCase++ {
+		var workSpace WorkSpace = createRandomWorkSpace(unitProps)
+		var fitnessValue, err = runSingleTest(workSpace, logicUnit, calculateFitness)
+		if err != nil {
+			return 0, nil
+		}
+		result += fitnessValue
+	}
 	return result, nil
 }
 
 func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction) {
-	var logicUnit = createRandomLogicUnit(unitProps)
-	fmt.Println(getLogicUnitString(logicUnit))
-	var testResult, err = testLogicUnit(unitProps, logicUnit, calculateFitness)
-	if err != nil {
-		fmt.Println(err.Error())
+	var step int
+	for step = 0; step < 1000; step++ {
+		var logicUnit = createRandomLogicUnit(unitProps)
+		var testResult, err = testLogicUnit(unitProps, logicUnit, calculateFitness)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Printf("#%d: test result: %f\n", step, testResult)
+
+		if testResult == 0.0 {
+			fmt.Println("found answer!")
+			fmt.Println(getLogicUnitString(logicUnit))
+			break
+		}
 	}
-	fmt.Printf("test result: %f\n", testResult)
 }
 
 func bytesToInteger(data []bool) int64 {
@@ -74,8 +79,8 @@ func main() {
 		return float64(output - input)
 	}
 	var unitProps = UnitProps{
-		InputSize:  1,
-		OutputSize: 1,
+		InputSize:  2,
+		OutputSize: 2,
 		MemorySize: 0,
 	}
 	startSimulation(unitProps, fitnessFunction)

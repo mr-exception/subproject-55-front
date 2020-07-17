@@ -1,19 +1,29 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
+
+func random() *rand.Rand {
+	// random seed
+	s1 := rand.NewSource(time.Now().UnixNano())
+	rnd := rand.New(s1)
+	return rnd
+}
 
 func createRandomLogicUnit(unitProps UnitProps) LogicUnit {
 	var logicUnit = LogicUnit{
-		A:      rand.Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
-		B:      rand.Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
-		Output: rand.Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
+		A:      random().Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
+		B:      random().Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
+		Output: random().Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
 		Operation: Operation{
-			MaskA:     rand.Float64() < 0.5,
-			MaskB:     rand.Float64() < 0.5,
+			MaskA:     random().Float64() < 0.5,
+			MaskB:     random().Float64() < 0.5,
 			Operation: "and",
 		},
 	}
-	if rand.Float64() < 0.5 {
+	if random().Float64() < 0.5 {
 		logicUnit.Operation.Operation = "or"
 	}
 	return logicUnit
@@ -28,7 +38,7 @@ func createRandomWorkSpace(unitProps UnitProps) WorkSpace {
 
 	var i int
 	for i = 0; i < int(unitProps.InputSize); i++ {
-		workSpace.Input = append(workSpace.Input, rand.Float32() < 0.5)
+		workSpace.Input = append(workSpace.Input, random().Float32() < 0.5)
 	}
 	for i = 0; i < int(unitProps.OutputSize); i++ {
 		workSpace.Output = append(workSpace.Output, false)
