@@ -41,10 +41,10 @@ func createRandomWorkSpace(unitProps UnitProps) WorkSpace {
 		workSpace.Input = append(workSpace.Input, random().Float32() < 0.5)
 	}
 	for i = 0; i < int(unitProps.OutputSize); i++ {
-		workSpace.Output = append(workSpace.Output, false)
+		workSpace.Output = append(workSpace.Output, random().Float32() < 0.5)
 	}
 	for i = 0; i < int(unitProps.MemorySize); i++ {
-		workSpace.Memory = append(workSpace.Memory, false)
+		workSpace.Memory = append(workSpace.Memory, random().Float32() < 0.5)
 	}
 	return workSpace
 }
