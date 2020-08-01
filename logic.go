@@ -17,11 +17,25 @@ type LogicUnit struct {
 	Operation Operation `json:"operation"`
 }
 
+// LogicStack defines a stack of logic units with age and deviation caused in learning progress
+type LogicStack struct {
+	Stack     []LogicUnit `json:"stack"`
+	Age       int         `json:"age"`
+	Deviation float64     `json:"deviation"`
+}
+
 // WorkSpace holds the current information of a running unit machine
 type WorkSpace struct {
 	Input  []bool `json:"input"`
 	Memory []bool `json:"memory"`
 	Output []bool `json:"output"`
+}
+
+// WorldConfigs holds the information of world
+type WorldConfigs struct {
+	MaxAge         int     `json:"max_age"`
+	StacksMaxCount int     `json:"stacks_max_count"`
+	ImmortalMax    float64 `json:"immortal_max"`
 }
 
 // getWorkSpaceBit returns a single bit as boolean by passing the workspace and position of wanted bit
@@ -116,14 +130,14 @@ func getLogicUnitString(logicUnit LogicUnit) string {
 }
 
 // runLogicUnit runs a single LogicUnit on a WorkSpace
-func runLogicUnit(workSpace WorkSpace, logicUnit LogicUnit) error {
+func runLogicUnit(workSpace WorkSpace, logicUnit LogicUnit) (WorkSpace, error) {
 	var a, indexAError = getWorkSpaceBit(workSpace, logicUnit.A)
 	if indexAError != nil {
-		return indexAError
+		return workSpace, indexAError
 	}
 	var b, indexBError = getWorkSpaceBit(workSpace, logicUnit.B)
 	if indexBError != nil {
-		return indexBError
+		return workSpace, indexBError
 	}
 
 	if !logicUnit.Operation.MaskA {
@@ -135,17 +149,17 @@ func runLogicUnit(workSpace WorkSpace, logicUnit LogicUnit) error {
 
 	switch logicUnit.Operation.Operation {
 	case "and":
-		var error = setWorkSpaceBit(workSpace, logicUnit.Output, a && b)
-		if error != nil {
-			return error
+		var err = setWorkSpaceBit(workSpace, logicUnit.Output, a && b)
+		if err != nil {
+			return workSpace, err
 		}
 		break
 	case "or":
-		var error = setWorkSpaceBit(workSpace, logicUnit.Output, a || b)
-		if error != nil {
-			return error
+		var err = setWorkSpaceBit(workSpace, logicUnit.Output, a || b)
+		if err != nil {
+			return workSpace, err
 		}
 		break
 	}
-	return nil
+	return workSpace, nil
 }

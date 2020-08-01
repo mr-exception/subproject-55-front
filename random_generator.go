@@ -38,3 +38,13 @@ func createRandomWorkSpace(unitProps UnitProps) WorkSpace {
 	}
 	return workSpace
 }
+
+func createRandomMonoLogicStack(unitProps UnitProps) LogicStack {
+	var logicStack = LogicStack{
+		Stack:     []LogicUnit{},
+		Age:       0,
+		Deviation: 0,
+	}
+	logicStack.Stack = append(logicStack.Stack, createRandomLogicUnit(unitProps))
+	return logicStack
+}
