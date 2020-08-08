@@ -16,7 +16,7 @@ func createRandomLogicUnit(unitProps UnitProps) LogicUnit {
 	var logicUnit = LogicUnit{
 		A:      random().Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
 		B:      random().Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
-		Output: random().Int63n(unitProps.InputSize + unitProps.MemorySize + unitProps.OutputSize),
+		Output: unitProps.InputSize + random().Int63n(unitProps.MemorySize+unitProps.OutputSize),
 		Operation: Operation{
 			MaskA:     random().Float64() < 0.5,
 			MaskB:     random().Float64() < 0.5,

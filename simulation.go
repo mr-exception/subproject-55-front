@@ -46,6 +46,7 @@ func getRandomBitIndex(unitProps UnitProps) int64 {
 // 	return result, nil
 // }
 
+// testLogicStack tests a single logic stack in a random workspace and effects the experience on it's age and deviation
 func testLogicStack(unitProps UnitProps, logicStack LogicStack, calculateFitness FitnessFunction) (LogicStack, error) {
 	// geneerate a random workspace
 	var workSpace WorkSpace = createRandomWorkSpace(unitProps)
@@ -68,6 +69,7 @@ func testLogicStack(unitProps UnitProps, logicStack LogicStack, calculateFitness
 	return logicStack, nil
 }
 
+// startSimulation executes a complete simulation for a problem
 func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worldConfigs WorldConfigs) {
 	// generate first group of logic stacks
 	var logicStacks = []LogicStack{}
@@ -79,27 +81,41 @@ func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worl
 	var step int
 	var firstStepBest float64 = 999
 	var prevStepBest float64 = 999
+
+	var totalKills int = 0
 	for step = 0; step < 2000; step++ {
 		var bestResult float64 = 999
 		for i = 0; i < len(logicStacks); i++ {
 			var ls, err = testLogicStack(unitProps, logicStacks[i], calculateFitness)
-			logicStacks[i] = ls
+			logicStacks[i] = ls // replace result logic stack to the original stack
+
 			if err != nil { // print error if exists
 				fmt.Println(err.Error())
 			}
-			if logicStacks[i].Deviation < bestResult {
+			// check if current logic stack has the best results
+			if math.Abs(logicStacks[i].Deviation) < math.Abs(bestResult) {
 				bestResult = logicStacks[i].Deviation
 				if step == 0 {
 					firstStepBest = bestResult
 				}
 			}
 		}
+
+		var ls, killsCount, err = executeArmag(logicStacks, calculateFitness, worldConfigs)
+		logicStacks = ls
+		totalKills += killsCount
+		if err != nil {
+			fmt.Errorf(err.Error())
+			return
+		}
+
+		// print results
 		if step%100 == 0 {
 			var ILS = prevStepBest - bestResult
 			var ILSPercent = int(((prevStepBest - bestResult) / prevStepBest) * 100)
 			var FLS = firstStepBest - bestResult
 			var FLSPercent = int(((firstStepBest - bestResult) / firstStepBest) * 100)
-			fmt.Printf("step: %d\nbest result: %f\nILS: %f (%d)\nFLS: %f (%d)\n", step, bestResult, ILS, ILSPercent, FLS, FLSPercent)
+			fmt.Printf("step: %d\nbest result: %f\nILS: %f (%d)\nFLS: %f (%d)\ntotal kills: %d\n========================\n", step, bestResult, ILS, ILSPercent, FLS, FLSPercent, totalKills)
 		}
 		prevStepBest = bestResult
 	}
@@ -122,24 +138,4 @@ func bytesToInteger(data []bool) int64 {
 		}
 	}
 	return result
-}
-
-func main() {
-	var fitnessFunction = func(workSpace WorkSpace) float64 {
-		var input int64 = bytesToInteger(workSpace.Input)
-		var output int64 = bytesToInteger(workSpace.Output)
-
-		return float64(output - input)
-	}
-	var worldConfigs = WorldConfigs{
-		MaxAge:         100,
-		StacksMaxCount: 10,
-		ImmortalMax:    10,
-	}
-	var unitProps = UnitProps{
-		InputSize:  12,
-		OutputSize: 12,
-		MemorySize: 0,
-	}
-	startSimulation(unitProps, fitnessFunction, worldConfigs)
 }
