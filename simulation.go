@@ -69,6 +69,16 @@ func testLogicStack(unitProps UnitProps, logicStack LogicStack, calculateFitness
 	return logicStack, nil
 }
 
+func avgDeviation(logicStacks []LogicStack) float64 {
+	var sum float64 = 0
+
+	var i int
+	for i = 0; i < len(logicStacks); i++ {
+		sum += logicStacks[i].Deviation
+	}
+	return sum / float64(len(logicStacks))
+}
+
 // startSimulation executes a complete simulation for a problem
 func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worldConfigs WorldConfigs) {
 	// generate first group of logic stacks
@@ -80,6 +90,7 @@ func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worl
 	// start simulation
 	var step int
 	var totalKills int = 0
+	var totalBirths int = 0
 	for step = 0; step < 2000; step++ {
 		var bestResult float64 = 999
 		for i = 0; i < len(logicStacks); i++ {
@@ -97,15 +108,22 @@ func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worl
 
 		var ls, killsCount, err = executeArmag(logicStacks, calculateFitness, worldConfigs)
 		logicStacks = ls
-		totalKills += killsCount
 		if err != nil {
 			fmt.Errorf(err.Error())
 			return
 		}
+		var ls1, birthCount, err1 = doBirth(logicStacks, unitProps, worldConfigs)
+		logicStacks = ls1
+		if err1 != nil {
+			fmt.Errorf(err.Error())
+			return
+		}
+		totalKills += killsCount
+		totalBirths += birthCount
 
 		// print results
 		if step%100 == 0 {
-			fmt.Printf("step: %d\nbest result: %f\ntotal kills: %d\n====================================\n", step, bestResult, totalKills)
+			fmt.Printf("step: %d (%d)\navg deviation: %f\nbest result: %f\nkills: %d\ttotal: %d\nbirths: %d\ttotal: %d\n====================================\n", step, len(logicStacks), avgDeviation(logicStacks), bestResult, killsCount, totalKills, birthCount, totalBirths)
 		}
 	}
 	// var logicUnit = createRandomLogicUnit(unitProps)

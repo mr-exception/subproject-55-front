@@ -16,7 +16,13 @@ func main() {
 		KillConditions: []KillCondition{
 			KillCondition{
 				MaxAge:       50,
-				MaxDeviation: 5,
+				MaxDeviation: 10,
+			},
+		},
+		BirthConditions: []BirthCondition{
+			BirthCondition{
+				MinAge:       25,
+				MaxDeviation: 0.5,
 			},
 		},
 	}
