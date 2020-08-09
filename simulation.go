@@ -79,9 +79,6 @@ func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worl
 	}
 	// start simulation
 	var step int
-	var firstStepBest float64 = 999
-	var prevStepBest float64 = 999
-
 	var totalKills int = 0
 	for step = 0; step < 2000; step++ {
 		var bestResult float64 = 999
@@ -95,9 +92,6 @@ func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worl
 			// check if current logic stack has the best results
 			if math.Abs(logicStacks[i].Deviation) < math.Abs(bestResult) {
 				bestResult = logicStacks[i].Deviation
-				if step == 0 {
-					firstStepBest = bestResult
-				}
 			}
 		}
 
@@ -111,13 +105,8 @@ func startSimulation(unitProps UnitProps, calculateFitness FitnessFunction, worl
 
 		// print results
 		if step%100 == 0 {
-			var ILS = prevStepBest - bestResult
-			var ILSPercent = int(((prevStepBest - bestResult) / prevStepBest) * 100)
-			var FLS = firstStepBest - bestResult
-			var FLSPercent = int(((firstStepBest - bestResult) / firstStepBest) * 100)
-			fmt.Printf("step: %d\nbest result: %f\nILS: %f (%d)\nFLS: %f (%d)\ntotal kills: %d\n========================\n", step, bestResult, ILS, ILSPercent, FLS, FLSPercent, totalKills)
+			fmt.Printf("step: %d\nbest result: %f\ntotal kills: %d\n====================================\n", step, bestResult, totalKills)
 		}
-		prevStepBest = bestResult
 	}
 	// var logicUnit = createRandomLogicUnit(unitProps)
 	// fmt.Println(getLogicUnitString(logicUnit))

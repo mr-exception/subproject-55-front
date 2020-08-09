@@ -31,11 +31,18 @@ type WorkSpace struct {
 	Output []bool `json:"output"`
 }
 
+// KillCondition is the definition of instant kill of logic stacks
+type KillCondition struct {
+	MaxAge       int     `json:"max_age"`
+	MaxDeviation float64 `json:"max_deviation"`
+}
+
 // WorldConfigs holds the information of world
 type WorldConfigs struct {
-	MaxAge         int     `json:"max_age"`
-	StacksMaxCount int     `json:"stacks_max_count"`
-	ImmortalMax    float64 `json:"immortal_max"`
+	MaxAge         int             `json:"max_age"`
+	StacksMaxCount int             `json:"stacks_max_count"`
+	ImmortalMax    float64         `json:"immortal_max"`
+	KillConditions []KillCondition `json:"kill_conditions"`
 }
 
 // getWorkSpaceBit returns a single bit as boolean by passing the workspace and position of wanted bit
